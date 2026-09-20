@@ -4,6 +4,7 @@ import { Briefcase, AlertCircle, Clock, CheckCircle, ChevronRight, Terminal, Cal
 import AboutUs from './AboutUs';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+const MAX_API_LIMIT = 5;
 
 // ─── Animated Counter ──────────────────────────────────────────────────────
 function AnimatedCounter({ value }: { value: number }) {
@@ -137,6 +138,7 @@ export default function Dashboard() {
   }, [dark]);
 
   const [asking, setAsking] = useState(false);
+  const [apiUsage, setApiUsage] = useState(0);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   // Voice
@@ -199,9 +201,18 @@ export default function Dashboard() {
     const q = overrideQ ?? question;
     if (!q.trim()) return;
     const userMsg: ChatMsg = { role: 'user', content: q };
+    
+    if (apiUsage >= MAX_API_LIMIT) {
+      setMessages(prev => [...prev, userMsg, { role: 'assistant', content: '⚠️ **API Limit Reached.** Please upgrade your plan or wait for the quota to reset.' }]);
+      setQuestion('');
+      setTimeout(() => chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
+      return;
+    }
+
     setMessages(prev => [...prev, userMsg]);
     setQuestion('');
     setAsking(true);
+    setApiUsage(prev => prev + 1);
     setTimeout(() => chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
     try {
       const res = await fetch(`${API_URL}/api/ask`, {
@@ -424,7 +435,22 @@ export default function Dashboard() {
 
             {/* Right: Chat */}
             <div className="col-span-1 flex flex-col">
-              <h2 className="text-lg font-bold border-b border-gray-200 dark:border-blue-900/50 pb-2 mb-3">ASK EXECPILOT</h2>
+              <div className="flex justify-between items-center border-b border-gray-200 dark:border-blue-900/50 pb-2 mb-3">
+                <h2 className="text-lg font-bold">ASK EXECPILOT</h2>
+                <div className="flex items-center gap-2" title={`API Usage: ${apiUsage}/${MAX_API_LIMIT}`}>
+                  {apiUsage >= MAX_API_LIMIT && <span className="text-xs font-bold text-blue-500">API Limit Reached</span>}
+                  <div className="relative w-5 h-5">
+                    <svg className="w-5 h-5 transform -rotate-90">
+                      <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="2" fill="none" className="text-gray-200 dark:text-gray-700" />
+                      <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="2" fill="none"
+                        className="text-blue-500 transition-all duration-500 ease-in-out"
+                        strokeDasharray="50.2"
+                        strokeDashoffset={50.2 - (50.2 * (Math.min(apiUsage, MAX_API_LIMIT) / MAX_API_LIMIT))}
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </div>
               <div className="bg-white dark:bg-[#050505] rounded-xl shadow-sm border border-gray-200 dark:border-blue-900/50 flex flex-col" style={{height: '520px'}}>
                 <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-3">
                   {messages.length === 0 && (

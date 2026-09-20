@@ -15,11 +15,13 @@ body {
   transition: background-color 0.3s, color 0.3s;
 }
 
-/* Dark mode body */
+/* Dark mode body - Black & Blue theme */
 .dark body, html.dark body {
-  background-color: #111827;
-  color: #f9fafb;
+  background-color: #000000;
+  color: #eff6ff; /* blue-50 */
 }
+
+
 
 /* Slide-down animation for What Changed banner */
 @keyframes slide-down {

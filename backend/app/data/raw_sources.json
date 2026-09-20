@@ -1,0 +1,46 @@
+[
+  {
+    "type": "meeting_transcript",
+    "id": "Leadership Sync",
+    "date": "2026-09-21",
+    "content": "Arjun: I told Raghav I'd send him the updated vendor list. Divya: What about the Mumbai Office Lease Renewal? I think it sits with Facilities but it's still unowned - can you confirm who's handling it by end of week?"
+  },
+  {
+    "type": "email",
+    "id": "Vendor List",
+    "date": "2026-09-22",
+    "sender": "Arjun Malhotra",
+    "recipient": "Raghav",
+    "content": "Raghav, I am reviewing the data. I will send by tomorrow (Wednesday) morning for sure."
+  },
+  {
+    "type": "voice_note",
+    "id": "Voice Note 1",
+    "date": "2026-09-22",
+    "content": "I need to get Raghav that vendor list, remind me."
+  },
+  {
+    "type": "email",
+    "id": "Q3 Campaign Deck",
+    "date": "2026-09-22",
+    "sender": "Neha Kapoor",
+    "recipient": "Arjun Malhotra",
+    "content": "Arjun, I'll have the Q3 campaign deck ready for you to review. Let's say 9:30 AM Thursday, before your board prep block."
+  },
+  {
+    "type": "email",
+    "id": "Expense Variance Report",
+    "date": "2026-09-23",
+    "sender": "Divya Rao",
+    "recipient": "Arjun Malhotra",
+    "content": "Arjun, July expense variance report attached, sent as promised."
+  },
+  {
+    "type": "email",
+    "id": "Call Reschedule",
+    "date": "2026-09-23",
+    "sender": "Priya Nair",
+    "recipient": "Arjun Malhotra",
+    "content": "Yes, confirmed, see you at 3 for the Meridian Logistics call."
+  }
+]

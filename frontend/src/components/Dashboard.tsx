@@ -8,7 +8,8 @@ export default function Dashboard() {
   const [selectedCommitment, setSelectedCommitment] = useState<any>(null);
 
   useEffect(() => {
-    fetch('http://127.0.0.1:8000/api/brief')
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+    fetch(`${apiUrl}/api/brief`)
       .then(res => res.json())
       .then(d => {
         setData(d);

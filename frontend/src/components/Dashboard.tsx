@@ -120,7 +120,7 @@ export default function Dashboard() {
   const [prevData, setPrevData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [selectedCommitment, setSelectedCommitment] = useState<any>(null);
-  const [asOfDate, setAsOfDate] = useState('2026-09-21T09:00:00');
+  const [asOfDate, setAsOfDate] = useState('2026-09-21T10:00:00');
   const [showBanner, setShowBanner] = useState(false);
 
   // Dark mode
@@ -327,7 +327,7 @@ export default function Dashboard() {
             <span className="text-sm font-medium text-orange-900">Simulate:</span>
             <select value={asOfDate} onChange={(e) => handleDateChange(e.target.value)}
               className="bg-white dark:bg-[#050505] border border-orange-200 text-sm rounded px-2 py-1 outline-none focus:ring-2 focus:ring-orange-500 dark:ring-blue-500">
-              <option value="2026-09-21T09:00:00">Mon 9:00 AM (Start)</option>
+              <option value="2026-09-21T10:00:00">Mon 10:00 AM (Start)</option>
               <option value="2026-09-23T08:45:00">Wed 8:45 AM (Raghav check-in)</option>
               <option value="2026-09-23T18:10:00">Wed 6:10 PM (Expense report)</option>
               <option value="2026-09-24T16:45:00">Thu 4:45 PM (Mumbai escalated)</option>

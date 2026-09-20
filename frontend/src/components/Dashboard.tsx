@@ -451,13 +451,13 @@ export default function Dashboard() {
                   {messages.map((msg, idx) => (
                     <div key={idx} className={`flex gap-2 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                       {msg.role === 'assistant' && (
-                        <div className="w-7 h-7 rounded-full bg-orange-50 dark:bg-blue-9500 dark:bg-blue-600 flex items-center justify-center flex-shrink-0 mt-1">
+                        <div className="w-7 h-7 rounded-full bg-orange-500 dark:bg-blue-600 flex items-center justify-center flex-shrink-0 mt-1">
                           <Bot className="w-4 h-4 text-white" />
                         </div>
                       )}
                       <div className={`max-w-[85%] px-3 py-2 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${
                         msg.role === 'user'
-                          ? 'bg-orange-50 dark:bg-blue-9500 dark:bg-blue-600 text-white rounded-tr-sm'
+                          ? 'bg-orange-500 dark:bg-blue-600 text-white rounded-tr-sm'
                           : 'bg-gray-100 dark:bg-[#0a0a0f] text-gray-800 dark:text-blue-100 rounded-tl-sm'
                       }`}>
                         {msg.content.split('**').map((part, i) =>
@@ -473,7 +473,7 @@ export default function Dashboard() {
                   ))}
                   {asking && (
                     <div className="flex gap-2 justify-start">
-                      <div className="w-7 h-7 rounded-full bg-orange-50 dark:bg-blue-9500 dark:bg-blue-600 flex items-center justify-center flex-shrink-0">
+                      <div className="w-7 h-7 rounded-full bg-orange-500 dark:bg-blue-600 flex items-center justify-center flex-shrink-0">
                         <Bot className="w-4 h-4 text-white" />
                       </div>
                       <div className="bg-gray-100 dark:bg-[#0a0a0f] px-4 py-3 rounded-2xl rounded-tl-sm flex items-center gap-1">
@@ -512,7 +512,7 @@ export default function Dashboard() {
                     </button>
                     <button type="submit"
                       disabled={asking || !question.trim()}
-                      className="absolute right-2 top-1.5 p-1.5 bg-orange-50 dark:bg-blue-9500 dark:bg-blue-600 text-white rounded-full hover:bg-orange-600 disabled:opacity-40 transition-colors">
+                      className="absolute right-2 top-1.5 p-1.5 bg-orange-500 dark:bg-blue-600 text-white rounded-full hover:bg-orange-600 disabled:opacity-40 transition-colors">
                       {asking ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
                     </button>
                   </form>

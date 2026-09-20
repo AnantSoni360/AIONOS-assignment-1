@@ -1,6 +1,6 @@
 "use client";
-import React, { useState, useEffect, useRef } from 'react';
-import { CheckCircle, AlertCircle, Clock, Search, ChevronRight, X, Briefcase, Calendar, RefreshCw, Send, Terminal, Bot, User } from 'lucide-react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { CheckCircle, AlertCircle, Clock, Search, ChevronRight, X, Briefcase, Calendar, RefreshCw, Send, Terminal, Bot, User, Mic, MicOff } from 'lucide-react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
 
@@ -16,6 +16,44 @@ export default function Dashboard() {
   const [question, setQuestion] = useState('');
   const [asking, setAsking] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
+
+  // Voice-to-text state
+  const [isListening, setIsListening] = useState(false);
+  const recognitionRef = useRef<any>(null);
+
+  const startListening = useCallback(() => {
+    const SpeechRecognition =
+      (window as any).SpeechRecognition ||
+      (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert('Voice input is not supported in this browser. Please use Chrome or Edge.');
+      return;
+    }
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.interimResults = true;  // show words as you speak
+    recognition.continuous = false;
+
+    recognition.onstart = () => setIsListening(true);
+
+    recognition.onresult = (event: any) => {
+      const transcript = Array.from(event.results)
+        .map((r: any) => r[0].transcript)
+        .join('');
+      setQuestion(transcript);  // populate input in real-time
+    };
+
+    recognition.onerror = () => setIsListening(false);
+    recognition.onend = () => setIsListening(false);
+
+    recognitionRef.current = recognition;
+    recognition.start();
+  }, []);
+
+  const stopListening = useCallback(() => {
+    recognitionRef.current?.stop();
+    setIsListening(false);
+  }, []);
 
   const [activeTab, setActiveTab] = useState<'dashboard' | 'raw'>('dashboard');
   const [refreshing, setRefreshing] = useState(false);
@@ -363,10 +401,29 @@ export default function Dashboard() {
                       type="text"
                       value={question}
                       onChange={(e) => setQuestion(e.target.value)}
-                      placeholder="Ask about commitments..."
+                      placeholder={isListening ? '🎙️ Listening...' : 'Ask about commitments...'}
                       disabled={asking}
-                      className="w-full bg-gray-50 border border-gray-200 rounded-full py-2.5 pl-4 pr-12 focus:outline-none focus:ring-2 focus:ring-orange-500 disabled:opacity-50 text-sm"
+                      className={`w-full bg-gray-50 border rounded-full py-2.5 pl-4 pr-20 focus:outline-none focus:ring-2 focus:ring-orange-500 disabled:opacity-50 text-sm transition-all ${
+                        isListening
+                          ? 'border-red-400 bg-red-50 ring-2 ring-red-300'
+                          : 'border-gray-200'
+                      }`}
                     />
+                    {/* Mic button */}
+                    <button
+                      type="button"
+                      onClick={isListening ? stopListening : startListening}
+                      disabled={asking}
+                      title={isListening ? 'Stop recording' : 'Speak your question'}
+                      className={`absolute right-10 top-1.5 p-1.5 rounded-full transition-all disabled:opacity-40 ${
+                        isListening
+                          ? 'bg-red-500 text-white animate-pulse shadow-lg shadow-red-300'
+                          : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+                      }`}
+                    >
+                      {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+                    </button>
+                    {/* Send button */}
                     <button
                       type="submit"
                       disabled={asking || !question.trim()}

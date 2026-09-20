@@ -358,10 +358,10 @@ export default function Dashboard() {
         <>
           {/* Metric Cards */}
           <div className="grid grid-cols-4 gap-4">
-            <MetricCard dark={dark} title="Total Actions" value={data.commitments.length} icon={<Briefcase className="w-5 h-5 text-blue-500" />} />
-            <MetricCard dark={dark} title="Overdue" value={data.commitments.filter((c:any) => c.status === 'overdue').length} icon={<AlertCircle className="w-5 h-5 text-red-500" />} color="red" />
-            <MetricCard dark={dark} title="My Actions" value={data.commitments.filter((c:any) => c.owner === 'Arjun Malhotra' && !c.waiting_on).length} icon={<Clock className="w-5 h-5 text-orange-500" />} />
-            <MetricCard dark={dark} title="Waiting / Unowned" value={data.commitments.filter((c:any) => c.owner !== 'Arjun Malhotra' || c.waiting_on).length} icon={<AlertCircle className="w-5 h-5 text-yellow-500" />} color="yellow" />
+            <MetricCard title="Total Actions" value={data.commitments.length} icon={<Briefcase className="w-5 h-5 text-blue-500" />} />
+            <MetricCard title="Overdue" value={data.commitments.filter((c:any) => c.status === 'overdue').length} icon={<AlertCircle className="w-5 h-5 text-red-500" />} color="red" />
+            <MetricCard title="My Actions" value={data.commitments.filter((c:any) => c.owner === 'Arjun Malhotra' && !c.waiting_on).length} icon={<Clock className="w-5 h-5 text-orange-500" />} />
+            <MetricCard title="Waiting / Unowned" value={data.commitments.filter((c:any) => c.owner !== 'Arjun Malhotra' || c.waiting_on).length} icon={<AlertCircle className="w-5 h-5 text-yellow-500" />} color="yellow" />
           </div>
 
           {/* Main 3-col grid */}
@@ -376,7 +376,7 @@ export default function Dashboard() {
                 </div>
                 <div className="flex flex-col gap-3">
                   {data.commitments.filter((c:any) => c.owner === 'Arjun Malhotra' && !c.waiting_on).map((c: any) => (
-                    <CommitmentCard key={c.id} c={c} dark={dark} onClick={() => setSelectedCommitment(c)} />
+                    <CommitmentCard key={c.id} c={c} onClick={() => setSelectedCommitment(c)} />
                   ))}
                   {data.commitments.filter((c:any) => c.owner === 'Arjun Malhotra' && !c.waiting_on).length === 0 && (
                     <p className="text-gray-500 text-sm italic py-4">No actions for you right now.</p>
@@ -391,7 +391,7 @@ export default function Dashboard() {
                 </div>
                 <div className="flex flex-col gap-3">
                   {data.commitments.filter((c:any) => c.owner !== 'Arjun Malhotra' || c.waiting_on).map((c: any) => (
-                    <CommitmentCard key={c.id} c={c} dark={dark} onClick={() => setSelectedCommitment(c)} waiting />
+                    <CommitmentCard key={c.id} c={c} onClick={() => setSelectedCommitment(c)} waiting />
                   ))}
                   {data.commitments.filter((c:any) => c.owner !== 'Arjun Malhotra' || c.waiting_on).length === 0 && (
                     <p className="text-gray-500 text-sm italic py-4">Nothing waiting on others.</p>
@@ -578,7 +578,7 @@ export default function Dashboard() {
 }
 
 // ─── Commitment Card ───────────────────────────────────────────────────────
-function CommitmentCard({ c, dark, onClick, waiting }: { c: any; dark: boolean; onClick: () => void; waiting?: boolean }) {
+function CommitmentCard({ c, onClick, waiting }: { c: any; onClick: () => void; waiting?: boolean }) {
   return (
     <div onClick={onClick}
       className={`bg-white p-4 rounded-xl shadow-sm border cursor-pointer hover:shadow-md transition-all flex justify-between items-center ${
@@ -624,7 +624,7 @@ function CommitmentCard({ c, dark, onClick, waiting }: { c: any; dark: boolean; 
 }
 
 // ─── Metric Card ───────────────────────────────────────────────────────────
-function MetricCard({ title, value, icon, color, dark }: { title: string; value: number; icon: React.ReactNode; color?: string; dark: boolean }) {
+function MetricCard({ title, value, icon, color }: { title: string; value: number; icon: React.ReactNode; color?: string; }) {
   return (
     <div className={`bg-white rounded-xl shadow-sm border p-5 flex items-center gap-4 ${
       color === 'red' && value > 0 ? 'border-red-200' :

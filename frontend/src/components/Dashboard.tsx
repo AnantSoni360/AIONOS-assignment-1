@@ -234,17 +234,17 @@ export default function Dashboard() {
   if (loading && !data) {
     return (
       <div className={`max-w-6xl mx-auto flex flex-col gap-6 ${dark ? 'dark' : ''}`}>
-        <div className="flex justify-between items-center pb-4 border-b border-gray-200 dark:border-gray-700">
+        <div className="flex justify-between items-center pb-4 border-b border-slate-200 dark:border-gray-700">
           <div>
-            <div className="h-7 w-48 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-2" />
-            <div className="h-4 w-32 bg-gray-100 dark:bg-gray-800 rounded animate-pulse" />
+            <div className="h-7 w-48 bg-slate-200 dark:bg-gray-700 rounded animate-pulse mb-2" />
+            <div className="h-4 w-32 bg-slate-100 dark:bg-gray-800 rounded animate-pulse" />
           </div>
         </div>
         <div className="grid grid-cols-4 gap-4">
           {[1,2,3,4].map(i => (
-            <div key={i} className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-5 animate-pulse">
-              <div className="h-8 w-12 bg-gray-200 dark:bg-gray-600 rounded mb-2" />
-              <div className="h-4 w-24 bg-gray-100 dark:bg-gray-700 rounded" />
+            <div key={i} className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-slate-100 dark:border-gray-700 p-5 animate-pulse">
+              <div className="h-8 w-12 bg-slate-200 dark:bg-gray-600 rounded mb-2" />
+              <div className="h-4 w-24 bg-slate-100 dark:bg-gray-700 rounded" />
             </div>
           ))}
         </div>
@@ -252,7 +252,7 @@ export default function Dashboard() {
           <div className="col-span-2 flex flex-col gap-3">
             {[1,2,3].map(i => <SkeletonCard key={i} />)}
           </div>
-          <div className="col-span-1 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 h-96 animate-pulse" />
+          <div className="col-span-1 bg-white dark:bg-gray-800 rounded-xl border border-slate-100 dark:border-gray-700 h-96 animate-pulse" />
         </div>
       </div>
     );
@@ -264,10 +264,10 @@ export default function Dashboard() {
       <header className="flex justify-between items-center pb-4 border-b border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-900 -mx-6 px-6 pt-4 rounded-xl shadow-sm mb-2">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2 dark:text-white">
-            <div className="w-3 h-3 bg-orange-500 rounded-full animate-pulse" />
+            <div className="w-3 h-3 bg-indigo-600 rounded-full animate-pulse" />
             ExecPilot AI
           </h1>
-          <p className="text-gray-500 dark:text-gray-400 text-sm">Executive Intelligence for {data?.executive || 'Arjun Malhotra'}</p>
+          <p className="text-slate-500 dark:text-gray-400 text-sm">Executive Intelligence for {data?.executive || 'Arjun Malhotra'}</p>
         </div>
         <div className="flex items-center gap-3">
           {/* Tabs */}
@@ -517,32 +517,32 @@ export default function Dashboard() {
           <div className="bg-white dark:bg-gray-900 w-[450px] h-full shadow-2xl p-6 flex flex-col">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-bold dark:text-white">Commitment Details</h2>
-              <button onClick={() => setSelectedCommitment(null)} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full">
+              <button onClick={() => setSelectedCommitment(null)} className="p-2 hover:bg-slate-100 dark:hover:bg-gray-800 rounded-full">
                 <X className="w-5 h-5 dark:text-white" />
               </button>
             </div>
             <div className="flex flex-col gap-6 flex-1 overflow-y-auto pr-2">
               <div>
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-1">{selectedCommitment.action}</h3>
+                <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-1">{selectedCommitment.action}</h3>
                 <div className="flex items-center gap-2 text-sm mt-2">
                   <span className={`px-2 py-1 rounded text-xs font-bold ${getStatusColor(selectedCommitment.status)}`}>
                     {selectedCommitment.status.toUpperCase()}
                   </span>
-                  <span className="text-gray-500 dark:text-gray-400">Priority: {selectedCommitment.priority}</span>
+                  <span className="text-slate-500 dark:text-gray-400">Priority: {selectedCommitment.priority}</span>
                 </div>
               </div>
-              <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 grid grid-cols-2 gap-4 text-sm">
+              <div className="bg-slate-50 dark:bg-gray-800 rounded-lg p-4 grid grid-cols-2 gap-4 text-sm">
                 <div>
-                  <p className="text-gray-500 dark:text-gray-400 text-xs mb-1">OWNER</p>
+                  <p className="text-slate-500 dark:text-gray-400 text-xs mb-1">OWNER</p>
                   <p className="font-medium dark:text-white">{selectedCommitment.owner || '⚠ UNCONFIRMED'}</p>
                 </div>
                 <div>
-                  <p className="text-gray-500 dark:text-gray-400 text-xs mb-1">DEADLINE</p>
+                  <p className="text-slate-500 dark:text-gray-400 text-xs mb-1">DEADLINE</p>
                   <p className="font-medium dark:text-white">{selectedCommitment.deadline}</p>
                 </div>
                 {selectedCommitment.waiting_on && (
                   <div className="col-span-2">
-                    <p className="text-gray-500 dark:text-gray-400 text-xs mb-1">WAITING ON</p>
+                    <p className="text-slate-500 dark:text-gray-400 text-xs mb-1">WAITING ON</p>
                     <p className="font-medium dark:text-white">{selectedCommitment.waiting_on}</p>
                   </div>
                 )}
@@ -550,31 +550,31 @@ export default function Dashboard() {
               {/* Evidence strength */}
               <div className="flex items-center gap-2 text-sm">
                 <span className={`px-2 py-1 rounded-full text-xs font-bold ${
-                  selectedCommitment.evidence?.length >= 3 ? 'bg-green-100 text-green-700' :
-                  selectedCommitment.evidence?.length === 2 ? 'bg-yellow-100 text-yellow-700' :
-                  'bg-gray-100 text-gray-700'
+                  selectedCommitment.evidence?.length >= 3 ? 'bg-emerald-100 text-emerald-700' :
+                  selectedCommitment.evidence?.length === 2 ? 'bg-amber-100 text-amber-700' :
+                  'bg-slate-100 text-slate-700'
                 }`}>
                   {selectedCommitment.evidence?.length >= 3 ? '🟢' : selectedCommitment.evidence?.length === 2 ? '🟡' : '⚪'}
                   {' '}{selectedCommitment.evidence?.length} source{selectedCommitment.evidence?.length !== 1 ? 's' : ''}
                 </span>
-                <span className="text-gray-500 dark:text-gray-400 text-xs">
+                <span className="text-slate-500 dark:text-gray-400 text-xs">
                   {selectedCommitment.evidence?.length >= 3 ? 'High confidence' :
                    selectedCommitment.evidence?.length === 2 ? 'Medium confidence' : 'Low confidence'}
                 </span>
               </div>
               <div>
-                <h4 className="font-bold border-b dark:border-gray-700 pb-2 mb-4 flex items-center gap-2 dark:text-white">
+                <h4 className="font-bold border-b border-slate-200 dark:border-gray-700 pb-2 mb-4 flex items-center gap-2 dark:text-white">
                   <Search className="w-4 h-4" /> Why I Know This (Evidence)
                 </h4>
                 <div className="flex flex-col gap-4">
                   {selectedCommitment.evidence?.map((ev: any, idx: number) => (
-                    <div key={idx} className="border-l-2 border-orange-400 pl-4 py-1">
+                    <div key={idx} className="border-l-2 border-indigo-400 pl-4 py-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase">{ev.source_type}</span>
-                        <span className="text-xs text-gray-400">· {ev.source_id}</span>
-                        {ev.timestamp && <span className="text-xs text-gray-300 dark:text-gray-600">· {ev.timestamp}</span>}
+                        <span className="text-xs font-bold text-slate-500 dark:text-gray-400 uppercase">{ev.source_type}</span>
+                        <span className="text-xs text-slate-400">· {ev.source_id}</span>
+                        {ev.timestamp && <span className="text-xs text-slate-300 dark:text-gray-600">· {ev.timestamp}</span>}
                       </div>
-                      <p className="text-sm italic text-gray-700 dark:text-gray-300">"{ev.text}"</p>
+                      <p className="text-sm italic text-slate-700 dark:text-gray-300">"{ev.text}"</p>
                     </div>
                   ))}
                 </div>

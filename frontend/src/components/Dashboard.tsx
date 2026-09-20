@@ -486,79 +486,100 @@ export default function Dashboard() {
                   </div>
                 </div>
               </div>
-              <div className="bg-white dark:bg-[#050505] rounded-xl shadow-sm border border-gray-200 dark:border-blue-900/50 flex flex-col" style={{height: '520px'}}>
-                <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-3">
+              <div className="bg-white dark:bg-[#050505] rounded-2xl shadow-md border border-gray-200 dark:border-blue-900/50 flex flex-col overflow-hidden" style={{height: '520px'}}>
+                {/* Chat header with gradient */}
+                <div className="bg-gradient-to-r from-orange-500 to-amber-400 dark:from-blue-700 dark:to-blue-500 px-4 py-3 flex items-center gap-3 flex-shrink-0">
+                  <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+                    <Bot className="w-4 h-4 text-white" />
+                  </div>
+                  <div>
+                    <p className="text-white font-semibold text-sm leading-none">ExecPilot AI</p>
+                    <p className="text-white/70 text-xs mt-0.5">{asking ? 'Thinking…' : 'Online · Ask anything'}</p>
+                  </div>
+                  <div className="ml-auto flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-green-300 animate-pulse" />
+                    <span className="text-white/60 text-xs">LIVE</span>
+                  </div>
+                </div>
+
+                {/* Messages */}
+                <div className="flex-1 overflow-y-auto px-4 py-3 flex flex-col gap-3 bg-gray-50/50 dark:bg-[#020202]">
                   {messages.length === 0 && (
-                    <div className="flex flex-col gap-2 h-full justify-center">
-                      <div className="flex items-center gap-2 text-orange-600 dark:text-blue-400 font-semibold mb-1">
-                        <Bot className="w-5 h-5" /><span>ExecPilot AI</span>
+                    <div className="flex flex-col gap-2 h-full justify-center items-center text-center px-2">
+                      <div className="w-14 h-14 rounded-full bg-gradient-to-br from-orange-400 to-amber-300 dark:from-blue-600 dark:to-blue-400 flex items-center justify-center shadow-md mb-1">
+                        <Bot className="w-7 h-7 text-white" />
                       </div>
-                      <p className="text-sm text-gray-500 dark:text-blue-400 mb-3">Ask me anything about Arjun's commitments:</p>
-                      {[
-                        'What did I promise Raghav?',
-                        'What needs action today?',
-                        'Who owns the Mumbai lease?',
-                        'Did Divya send the expense report?',
-                        'Do I have any meeting conflicts on Thursday?',
-                      ].map(q => (
-                        <button key={q}
-                          onClick={(e) => { setQuestion(q); handleAsk(e as any, q); }}
-                          className="text-left text-sm px-3 py-2 rounded-lg bg-orange-50 dark:bg-blue-950 hover:bg-orange-100 dark:hover:bg-blue-900:bg-orange-900 text-orange-800 dark:text-blue-200 border border-orange-100 dark:border-blue-900 transition-colors">
-                          {q}
-                        </button>
-                      ))}
+                      <p className="font-semibold text-gray-700 dark:text-blue-100 text-sm">Your AI Executive Assistant</p>
+                      <p className="text-xs text-gray-400 dark:text-blue-400 mb-3 max-w-[180px]">Tap a question or type your own</p>
+                      <div className="flex flex-col gap-2 w-full">
+                        {[
+                          'What did I promise Raghav?',
+                          'What needs action today?',
+                          'Who owns the Mumbai lease?',
+                          'Did Divya send the expense report?',
+                          'Do I have any meeting conflicts on Thursday?',
+                        ].map(q => (
+                          <button key={q}
+                            onClick={(e) => { setQuestion(q); handleAsk(e as any, q); }}
+                            className="text-left text-xs px-3 py-2 rounded-xl bg-white dark:bg-[#0a0a0f] hover:bg-orange-50 dark:hover:bg-blue-950 text-gray-700 dark:text-blue-200 border border-gray-200 dark:border-blue-900/50 hover:border-orange-300 dark:hover:border-blue-600 transition-all shadow-sm flex items-center gap-2">
+                            <span className="text-orange-400 dark:text-blue-400 font-bold">›</span>{q}
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   )}
                   {messages.map((msg, idx) => (
                     <div key={idx} className={`flex gap-2 ${msg.role === 'user' ? 'justify-end animate-chat-right' : 'justify-start animate-chat-left'}`}>
                       {msg.role === 'assistant' && (
-                        <div className="w-7 h-7 rounded-full bg-orange-500 dark:bg-blue-600 flex items-center justify-center flex-shrink-0 mt-1">
+                        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-orange-500 to-amber-400 dark:from-blue-600 dark:to-blue-400 flex items-center justify-center flex-shrink-0 mt-1 shadow-sm">
                           <Bot className="w-4 h-4 text-white" />
                         </div>
                       )}
-                      <div className={`max-w-[85%] px-3 py-2 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${
+                      <div className={`max-w-[82%] px-3 py-2.5 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap shadow-sm ${
                         msg.role === 'user'
-                          ? 'bg-orange-500 dark:bg-blue-600 text-white rounded-tr-sm'
-                          : 'bg-gray-100 dark:bg-[#0a0a0f] text-gray-800 dark:text-blue-100 rounded-tl-sm'
+                          ? 'bg-gradient-to-br from-orange-500 to-amber-400 dark:from-blue-600 dark:to-blue-400 text-white rounded-tr-sm'
+                          : 'bg-white dark:bg-[#0a0a0f] text-gray-800 dark:text-blue-100 rounded-tl-sm border border-gray-100 dark:border-blue-950'
                       }`}>
                         {msg.content.split('**').map((part, i) =>
                           i % 2 === 1 ? <strong key={i}>{part}</strong> : <span key={i}>{part}</span>
                         )}
                       </div>
                       {msg.role === 'user' && (
-                        <div className="w-7 h-7 rounded-full bg-gray-200 dark:bg-[#101018] flex items-center justify-center flex-shrink-0 mt-1">
-                          <User className="w-4 h-4 text-gray-600 dark:text-blue-300" />
+                        <div className="w-7 h-7 rounded-full bg-gray-200 dark:bg-[#101018] flex items-center justify-center flex-shrink-0 mt-1 shadow-sm">
+                          <img src="/arjun.jpg" alt="Arjun" className="w-7 h-7 rounded-full object-cover" />
                         </div>
                       )}
                     </div>
                   ))}
                   {asking && (
-                    <div className="flex gap-2 justify-start">
-                      <div className="w-7 h-7 rounded-full bg-orange-500 dark:bg-blue-600 flex items-center justify-center flex-shrink-0">
+                    <div className="flex gap-2 justify-start animate-chat-left">
+                      <div className="w-7 h-7 rounded-full bg-gradient-to-br from-orange-500 to-amber-400 dark:from-blue-600 dark:to-blue-400 flex items-center justify-center flex-shrink-0 shadow-sm">
                         <Bot className="w-4 h-4 text-white" />
                       </div>
-                      <div className="bg-gray-100 dark:bg-[#0a0a0f] px-4 py-3 rounded-2xl rounded-tl-sm flex items-center gap-1">
-                        <span className="w-2 h-2 bg-orange-400 rounded-full animate-bounce" style={{animationDelay:'0ms'}} />
-                        <span className="w-2 h-2 bg-orange-400 rounded-full animate-bounce" style={{animationDelay:'150ms'}} />
-                        <span className="w-2 h-2 bg-orange-400 rounded-full animate-bounce" style={{animationDelay:'300ms'}} />
+                      <div className="bg-white dark:bg-[#0a0a0f] border border-gray-100 dark:border-blue-950 px-4 py-3 rounded-2xl rounded-tl-sm flex items-center gap-1 shadow-sm">
+                        <span className="w-2 h-2 bg-orange-400 dark:bg-blue-400 rounded-full animate-bounce" style={{animationDelay:'0ms'}} />
+                        <span className="w-2 h-2 bg-orange-400 dark:bg-blue-400 rounded-full animate-bounce" style={{animationDelay:'150ms'}} />
+                        <span className="w-2 h-2 bg-orange-400 dark:bg-blue-400 rounded-full animate-bounce" style={{animationDelay:'300ms'}} />
                       </div>
                     </div>
                   )}
                   <div ref={chatEndRef} />
                 </div>
-                <div className="border-t border-gray-100 dark:border-blue-950 p-3">
+
+                {/* Input bar */}
+                <div className="border-t border-gray-100 dark:border-blue-950 px-3 py-2.5 bg-white dark:bg-[#050505] flex-shrink-0">
                   {messages.length > 0 && (
                     <button onClick={() => setMessages([])}
-                      className="text-xs text-gray-400 dark:text-blue-500 hover:text-red-500 mb-2 transition-colors">
-                      Clear conversation
+                      className="text-xs text-gray-400 dark:text-blue-500 hover:text-red-500 mb-2 transition-colors flex items-center gap-1">
+                      <X className="w-3 h-3" /> Clear conversation
                     </button>
                   )}
-                  <form onSubmit={handleAsk} className="relative">
+                  <form onSubmit={handleAsk} className="relative flex items-center">
                     <input type="text" value={question}
                       onChange={(e) => setQuestion(e.target.value)}
                       placeholder={isListening ? '🎙️ Listening…' : 'Ask about commitments…'}
                       disabled={asking}
-                      className={`w-full bg-gray-50 dark:bg-[#0a0a0f] border rounded-full py-2.5 pl-4 pr-20 focus:outline-none focus:ring-2 focus:ring-orange-500 dark:ring-blue-500 disabled:opacity-50 text-sm transition-all ${
+                      className={`w-full bg-gray-50 dark:bg-[#0a0a0f] border rounded-full py-2.5 pl-4 pr-20 focus:outline-none focus:ring-2 focus:ring-orange-400 dark:focus:ring-blue-500 disabled:opacity-50 text-sm transition-all ${
                         isListening ? 'border-red-400 bg-red-50 ring-2 ring-red-300' : 'border-gray-200 dark:border-blue-900/50'
                       }`}
                     />
@@ -567,18 +588,19 @@ export default function Dashboard() {
                       disabled={asking}
                       title={isListening ? 'Stop recording' : 'Speak your question'}
                       className={`absolute right-10 top-1.5 p-1.5 rounded-full transition-all disabled:opacity-40 ${
-                        isListening ? 'bg-red-500 text-white animate-pulse shadow-lg shadow-red-300' : 'bg-gray-200 dark:bg-[#101018] text-gray-600 dark:text-blue-300 hover:bg-gray-300'
+                        isListening ? 'bg-red-500 text-white animate-pulse shadow-lg shadow-red-300' : 'bg-gray-100 dark:bg-[#101018] text-gray-500 dark:text-blue-300 hover:bg-gray-200'
                       }`}>
                       {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
                     </button>
                     <button type="submit"
                       disabled={asking || !question.trim()}
-                      className="absolute right-2 top-1.5 p-1.5 bg-orange-500 dark:bg-blue-600 text-white rounded-full hover:bg-orange-600 disabled:opacity-40 transition-colors">
+                      className="absolute right-1.5 top-1.5 p-1.5 bg-gradient-to-br from-orange-500 to-amber-400 dark:from-blue-600 dark:to-blue-400 text-white rounded-full hover:opacity-90 disabled:opacity-40 transition-all shadow-sm">
                       {asking ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
                     </button>
                   </form>
                 </div>
               </div>
+
             </div>
           </div>
         </>

@@ -1,6 +1,6 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import { CheckCircle, AlertCircle, Clock, Search, ChevronRight, X, Briefcase, Calendar, RefreshCw, Send, Terminal } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { CheckCircle, AlertCircle, Clock, Search, ChevronRight, X, Briefcase, Calendar, RefreshCw, Send, Terminal, Bot, User } from 'lucide-react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
 
@@ -9,10 +9,13 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [selectedCommitment, setSelectedCommitment] = useState<any>(null);
   const [asOfDate, setAsOfDate] = useState('2026-09-21T09:00:00');
-  
+
+  // Chat state — full conversation history
+  type ChatMsg = { role: 'user' | 'assistant'; content: string };
+  const [messages, setMessages] = useState<ChatMsg[]>([]);
   const [question, setQuestion] = useState('');
-  const [answer, setAnswer] = useState<string | null>(null);
   const [asking, setAsking] = useState(false);
+  const chatEndRef = useRef<HTMLDivElement>(null);
 
   const [activeTab, setActiveTab] = useState<'dashboard' | 'raw'>('dashboard');
   const [refreshing, setRefreshing] = useState(false);
@@ -35,24 +38,41 @@ export default function Dashboard() {
     fetchBrief(asOfDate);
   }, [asOfDate]);
 
-  const handleAsk = async (e: React.FormEvent) => {
+  const handleAsk = async (e: React.FormEvent, overrideQ?: string) => {
     e.preventDefault();
-    if (!question.trim()) return;
-    
+    const q = overrideQ ?? question;
+    if (!q.trim()) return;
+
+    const userMsg: ChatMsg = { role: 'user', content: q };
+    const newHistory = [...messages, userMsg];
+    setMessages(newHistory);
+    setQuestion('');
     setAsking(true);
+
+    // scroll to bottom
+    setTimeout(() => chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
+
     try {
       const res = await fetch(`${API_URL}/api/ask`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question, as_of: asOfDate })
+        body: JSON.stringify({
+          question: q,
+          as_of: asOfDate,
+          history: messages  // send full history
+        })
       });
       const d = await res.json();
-      setAnswer(d.answer);
+      const assistantMsg: ChatMsg = { role: 'assistant', content: d.answer };
+      setMessages(prev => [...prev, assistantMsg]);
     } catch (err) {
-      console.error(err);
-      setAnswer("Failed to connect to agent.");
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: 'Failed to connect to the agent. Please check the backend is running.'
+      }]);
     }
     setAsking(false);
+    setTimeout(() => chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
   };
 
   const handleRefreshAgent = async () => {
@@ -254,46 +274,108 @@ export default function Dashboard() {
               </div>
             </div>
 
-            {/* Right Col: Ask ExecPilot */}
-            <div className="col-span-1 flex flex-col gap-4">
-              <h2 className="text-lg font-bold border-b border-gray-200 pb-2">ASK EXECPILOT</h2>
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 h-full flex flex-col">
-                <div className="flex-1 overflow-y-auto mb-4">
-                  {answer ? (
-                    <div className="bg-orange-50 border border-orange-100 rounded-lg p-4 text-sm text-gray-800 leading-relaxed">
-                      <div className="flex items-center gap-2 font-bold text-orange-800 mb-2">
-                        <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-                        Agent Response
+            {/* Right Col: Ask ExecPilot Chat */}
+            <div className="col-span-1 flex flex-col">
+              <h2 className="text-lg font-bold border-b border-gray-200 pb-2 mb-3">ASK EXECPILOT</h2>
+              <div className="bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col" style={{height: '520px'}}>
+
+                {/* Chat messages area */}
+                <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-3">
+                  {messages.length === 0 && (
+                    <div className="flex flex-col gap-2 h-full justify-center">
+                      <div className="flex items-center gap-2 text-orange-600 font-semibold mb-1">
+                        <Bot className="w-5 h-5" />
+                        <span>ExecPilot AI</span>
                       </div>
-                      {answer}
-                    </div>
-                  ) : (
-                    <div className="bg-gray-50 rounded-lg p-4 text-sm text-gray-600">
-                      <p className="font-medium text-gray-800 mb-2">Suggested questions:</p>
-                      <ul className="list-disc list-inside space-y-1.5">
-                        <li className="cursor-pointer hover:text-orange-600" onClick={() => setQuestion("What did I promise Raghav?")}>What did I promise Raghav?</li>
-                        <li className="cursor-pointer hover:text-orange-600" onClick={() => setQuestion("What needs action today?")}>What needs action today?</li>
-                      </ul>
+                      <p className="text-sm text-gray-500 mb-3">Ask me anything about Arjun's commitments:</p>
+                      {[
+                        'What did I promise Raghav?',
+                        'What needs action today?',
+                        'Who owns the Mumbai lease?',
+                        'Did Divya send the expense report?',
+                        'Do I have any meeting conflicts on Thursday?',
+                      ].map(q => (
+                        <button
+                          key={q}
+                          onClick={(e) => { setQuestion(q); handleAsk(e as any, q); }}
+                          className="text-left text-sm px-3 py-2 rounded-lg bg-orange-50 hover:bg-orange-100 text-orange-800 border border-orange-100 transition-colors"
+                        >
+                          {q}
+                        </button>
+                      ))}
                     </div>
                   )}
+
+                  {messages.map((msg, idx) => (
+                    <div key={idx} className={`flex gap-2 ${ msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                      {msg.role === 'assistant' && (
+                        <div className="w-7 h-7 rounded-full bg-orange-500 flex items-center justify-center flex-shrink-0 mt-1">
+                          <Bot className="w-4 h-4 text-white" />
+                        </div>
+                      )}
+                      <div className={`max-w-[85%] px-3 py-2 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${
+                        msg.role === 'user'
+                          ? 'bg-orange-500 text-white rounded-tr-sm'
+                          : 'bg-gray-100 text-gray-800 rounded-tl-sm'
+                      }`}>
+                        {msg.content.split('**').map((part, i) =>
+                          i % 2 === 1
+                            ? <strong key={i}>{part}</strong>
+                            : <span key={i}>{part}</span>
+                        )}
+                      </div>
+                      {msg.role === 'user' && (
+                        <div className="w-7 h-7 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0 mt-1">
+                          <User className="w-4 h-4 text-gray-600" />
+                        </div>
+                      )}
+                    </div>
+                  ))}
+
+                  {/* Typing indicator */}
+                  {asking && (
+                    <div className="flex gap-2 justify-start">
+                      <div className="w-7 h-7 rounded-full bg-orange-500 flex items-center justify-center flex-shrink-0">
+                        <Bot className="w-4 h-4 text-white" />
+                      </div>
+                      <div className="bg-gray-100 px-4 py-3 rounded-2xl rounded-tl-sm flex items-center gap-1">
+                        <span className="w-2 h-2 bg-orange-400 rounded-full animate-bounce" style={{animationDelay:'0ms'}} />
+                        <span className="w-2 h-2 bg-orange-400 rounded-full animate-bounce" style={{animationDelay:'150ms'}} />
+                        <span className="w-2 h-2 bg-orange-400 rounded-full animate-bounce" style={{animationDelay:'300ms'}} />
+                      </div>
+                    </div>
+                  )}
+                  <div ref={chatEndRef} />
                 </div>
-                <form onSubmit={handleAsk} className="relative">
-                  <input 
-                    type="text" 
-                    value={question}
-                    onChange={(e) => setQuestion(e.target.value)}
-                    placeholder="Ask about commitments..."
-                    disabled={asking}
-                    className="w-full bg-gray-50 border border-gray-200 rounded-full py-2.5 pl-4 pr-12 focus:outline-none focus:ring-2 focus:ring-orange-500 disabled:opacity-50"
-                  />
-                  <button 
-                    type="submit" 
-                    disabled={asking || !question.trim()}
-                    className="absolute right-2 top-1.5 p-1.5 bg-orange-500 text-white rounded-full hover:bg-orange-600 disabled:opacity-50"
-                  >
-                    {asking ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
-                  </button>
-                </form>
+
+                {/* Input bar */}
+                <div className="border-t border-gray-100 p-3">
+                  {messages.length > 0 && (
+                    <button
+                      onClick={() => setMessages([])}
+                      className="text-xs text-gray-400 hover:text-red-500 mb-2 transition-colors"
+                    >
+                      Clear conversation
+                    </button>
+                  )}
+                  <form onSubmit={handleAsk} className="relative">
+                    <input
+                      type="text"
+                      value={question}
+                      onChange={(e) => setQuestion(e.target.value)}
+                      placeholder="Ask about commitments..."
+                      disabled={asking}
+                      className="w-full bg-gray-50 border border-gray-200 rounded-full py-2.5 pl-4 pr-12 focus:outline-none focus:ring-2 focus:ring-orange-500 disabled:opacity-50 text-sm"
+                    />
+                    <button
+                      type="submit"
+                      disabled={asking || !question.trim()}
+                      className="absolute right-2 top-1.5 p-1.5 bg-orange-500 text-white rounded-full hover:bg-orange-600 disabled:opacity-40 transition-colors"
+                    >
+                      {asking ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                    </button>
+                  </form>
+                </div>
               </div>
             </div>
 

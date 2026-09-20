@@ -273,15 +273,35 @@ export default function Dashboard() {
 
   return (
     <div className={`max-w-6xl mx-auto flex flex-col gap-6 ${dark ? 'dark text-gray-100' : ''}`}>
-      {/* Header */}
-      <header className="flex justify-between items-center pb-4 border-b border-gray-200 dark:border-blue-900/50">
-        <div>
-          <h1 className="text-2xl font-bold flex dark:text-white items-center gap-2">
-            <div className="w-3 h-3 bg-orange-500 dark:bg-blue-500 rounded-full animate-pulse" />
-            ExecPilot AI
-          </h1>
-          <p className="text-gray-500 dark:text-blue-400 text-sm">Executive Intelligence for {data?.executive || 'Arjun Malhotra'}</p>
-        </div>
+      {/* Hero Header Banner */}
+      <header className="relative overflow-hidden rounded-2xl mb-2">
+        {/* Background image + orange tint overlay */}
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url('/hero-bg.jpg')` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-orange-500/10 via-white/40 to-transparent dark:from-blue-900/60 dark:via-black/70 dark:to-black/80" />
+        <div className="relative z-10 flex justify-between items-center px-6 py-5">
+          {/* Left: Avatar + Title */}
+          <div className="flex items-center gap-4">
+            <div className="relative">
+              <img
+                src="/arjun.jpg"
+                alt="Arjun Malhotra"
+                className="w-14 h-14 rounded-full object-cover border-2 border-white dark:border-blue-500 shadow-lg"
+              />
+              <span className="absolute bottom-0.5 right-0.5 w-3 h-3 bg-green-400 border-2 border-white rounded-full" title="Active" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2 mb-0.5">
+                <div className="w-2 h-2 bg-orange-500 dark:bg-blue-400 rounded-full animate-pulse" />
+                <h1 className="text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight">ExecPilot AI</h1>
+              </div>
+              <p className="text-sm text-gray-600 dark:text-blue-300 font-medium">
+                {data?.executive || 'Arjun Malhotra'} · <span className="text-orange-500 dark:text-blue-400 font-semibold">VP Sales</span>
+              </p>
+            </div>
+          </div>
         <div className="flex items-center gap-3">
           {/* Tabs */}
           <div className="flex bg-gray-100 dark:bg-[#0a0a0f] p-1 rounded-lg">
@@ -322,6 +342,7 @@ export default function Dashboard() {
             {dark ? <Sun className="w-4 h-4 text-yellow-400" /> : <Moon className="w-4 h-4 text-gray-600 dark:text-blue-300 dark:text-blue-400" />}
           </button>
         </div>
+      </div>
       </header>
 
       {/* What Changed Banner */}
@@ -391,10 +412,28 @@ export default function Dashboard() {
         <>
           {/* Metric Cards */}
           <div className="grid grid-cols-4 gap-4">
-            <MetricCard title="Total Actions" value={data.commitments.length} icon={<Briefcase className="w-5 h-5 text-blue-500" />} />
-            <MetricCard title="Overdue" value={data.commitments.filter((c:any) => c.status === 'overdue').length} icon={<AlertCircle className="w-5 h-5 text-red-500" />} color="red" />
-            <MetricCard title="My Actions" value={data.commitments.filter((c:any) => c.owner === 'Arjun Malhotra' && !c.waiting_on).length} icon={<Clock className="w-5 h-5 text-orange-500 dark:text-blue-500" />} />
-            <MetricCard title="Waiting / Unowned" value={data.commitments.filter((c:any) => c.owner !== 'Arjun Malhotra' || c.waiting_on).length} icon={<AlertCircle className="w-5 h-5 text-yellow-500" />} color="yellow" />
+            <MetricCard
+              title="Total Actions" value={data.commitments.length}
+              icon={<Briefcase className="w-5 h-5" />}
+              gradient="from-blue-500 to-blue-600"
+            />
+            <MetricCard
+              title="Overdue" value={data.commitments.filter((c:any) => c.status === 'overdue').length}
+              icon={<AlertCircle className="w-5 h-5" />}
+              gradient="from-red-500 to-rose-600"
+              color="red"
+            />
+            <MetricCard
+              title="My Actions" value={data.commitments.filter((c:any) => c.owner === 'Arjun Malhotra' && !c.waiting_on).length}
+              icon={<Clock className="w-5 h-5" />}
+              gradient="from-orange-500 to-amber-500 dark:from-blue-500 dark:to-blue-600"
+            />
+            <MetricCard
+              title="Waiting / Unowned" value={data.commitments.filter((c:any) => c.owner !== 'Arjun Malhotra' || c.waiting_on).length}
+              icon={<AlertCircle className="w-5 h-5" />}
+              gradient="from-yellow-400 to-orange-400"
+              color="yellow"
+            />
           </div>
 
           {/* Main 3-col grid */}
@@ -672,19 +711,26 @@ function CommitmentCard({ c, onClick, waiting }: { c: any; onClick: () => void; 
 }
 
 // ─── Metric Card ───────────────────────────────────────────────────────────
-function MetricCard({ title, value, icon, color }: { title: string; value: number; icon: React.ReactNode; color?: string; }) {
+function MetricCard({ title, value, icon, color, gradient }: { title: string; value: number; icon: React.ReactNode; color?: string; gradient?: string }) {
+  const g = gradient || 'from-gray-400 to-gray-500';
   return (
-    <div className={`bg-white dark:bg-[#050505] rounded-xl shadow-sm border p-5 flex items-center gap-4 ${
+    <div className={`bg-white dark:bg-[#050505] rounded-2xl shadow-sm border overflow-hidden transition-all hover:-translate-y-0.5 hover:shadow-md ${
       color === 'red' && value > 0 ? 'border-red-200' :
       color === 'yellow' && value > 0 ? 'border-yellow-200' :
       'border-gray-100 dark:border-blue-950'
     }`}>
-      <div className="p-3 bg-gray-50 dark:bg-[#0a0a0f] rounded-lg">{icon}</div>
-      <div>
-        <p className="text-2xl font-bold dark:text-blue-50">
-          <AnimatedCounter value={value} />
-        </p>
-        <p className="text-sm text-gray-500 dark:text-blue-400 font-medium">{title}</p>
+      {/* Gradient accent top strip */}
+      <div className={`h-1 w-full bg-gradient-to-r ${g}`} />
+      <div className="p-5 flex items-center gap-4">
+        <div className={`p-3 rounded-xl bg-gradient-to-br ${g} text-white shadow-sm`}>
+          {icon}
+        </div>
+        <div>
+          <p className="text-2xl font-extrabold dark:text-blue-50 tracking-tight">
+            <AnimatedCounter value={value} />
+          </p>
+          <p className="text-xs text-gray-500 dark:text-blue-400 font-semibold uppercase tracking-wider mt-0.5">{title}</p>
+        </div>
       </div>
     </div>
   );

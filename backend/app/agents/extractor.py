@@ -74,15 +74,21 @@ INPUT SOURCES:
     }
 
     async with httpx.AsyncClient() as client:
-        response = await client.post(
-            MISTRAL_API_URL,
-            headers=headers,
-            json=payload,
-            timeout=45
-        )
-
-        response.raise_for_status()
-        result = response.json()
+        try:
+            response = await client.post(
+                MISTRAL_API_URL,
+                headers=headers,
+                json=payload,
+                timeout=45
+            )
+            response.raise_for_status()
+            result = response.json()
+        except httpx.HTTPError as e:
+            print(f"Mistral API error: {e}. Falling back to seed_data.json")
+            from pathlib import Path
+            seed_file = Path(__file__).resolve().parent.parent / "data" / "seed_data.json"
+            with open(seed_file, "r", encoding="utf-8") as f:
+                return json.load(f)["commitments"]
         content = result["choices"][0]["message"]["content"]
         
         # Clean markdown fences if any are returned accidentally

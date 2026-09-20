@@ -1,27 +1,65 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #f97316;
-  --color-primary-dark: #ea580c;
-  --color-charcoal: #1f2937;
-  --color-charcoal-light: #374151;
-  --color-charcoal-lighter: #4b5563;
-  --color-bg-light: #f8fafc;
+  /* Brand */
+  --color-primary:       #4F46E5;   /* indigo-600  */
+  --color-primary-hover: #4338CA;   /* indigo-700  */
+  --color-primary-light: #EEF2FF;   /* indigo-50   */
+  --color-primary-mid:   #C7D2FE;   /* indigo-200  */
+
+  /* Page surfaces */
+  --color-bg-page:  #F1F5F9;        /* slate-100   */
+  --color-bg-card:  #FFFFFF;
+  --color-bg-muted: #F8FAFC;        /* slate-50    */
+
+  /* Text */
+  --color-text-primary:   #0F172A;  /* slate-900   */
+  --color-text-secondary: #64748B;  /* slate-500   */
+  --color-text-muted:     #94A3B8;  /* slate-400   */
+
+  /* Borders */
+  --color-border:       #E2E8F0;    /* slate-200   */
+  --color-border-light: #F1F5F9;    /* slate-100   */
+
+  /* Status — muted pastels */
+  --color-overdue-bg:   #FFF1F2;    /* rose-50     */
+  --color-overdue-text: #BE123C;    /* rose-700    */
+  --color-overdue-border:#FECDD3;   /* rose-200    */
+  --color-overdue-strip:#F43F5E;    /* rose-500    */
+
+  --color-unowned-bg:   #FFFBEB;    /* amber-50    */
+  --color-unowned-text: #92400E;    /* amber-800   */
+  --color-unowned-border:#FDE68A;   /* amber-200   */
+  --color-unowned-strip:#F59E0B;    /* amber-500   */
+
+  --color-done-bg:   #F0FDF4;       /* emerald-50  */
+  --color-done-text: #065F46;       /* emerald-800 */
+  --color-done-strip:#10B981;       /* emerald-500 */
+
+  --color-pending-strip:#6366F1;    /* indigo-500  */
+
+  /* Legacy compat */
+  --color-charcoal: #0F172A;
+  --color-charcoal-light: #334155;
+  --color-charcoal-lighter: #64748B;
+  --color-bg-light: #F1F5F9;
 }
 
+/* ─── Base ─────────────────────────────────────── */
 body {
-  background-color: var(--color-bg-light);
-  color: var(--color-charcoal);
+  background-color: var(--color-bg-page);
+  color: var(--color-text-primary);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   transition: background-color 0.3s, color 0.3s;
 }
 
-/* Dark mode body */
+/* ─── Dark mode body ────────────────────────────── */
 .dark body, html.dark body {
-  background-color: #111827;
-  color: #f9fafb;
+  background-color: #0F172A;
+  color: #F1F5F9;
 }
 
-/* Slide-down animation for What Changed banner */
+/* ─── Slide-down banner ─────────────────────────── */
 @keyframes slide-down {
   from { opacity: 0; transform: translateY(-8px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -30,7 +68,7 @@ body {
   animation: slide-down 0.3s ease-out;
 }
 
-/* Fade-in for agent log steps */
+/* ─── Agent log fade-in ─────────────────────────── */
 @keyframes fade-in {
   from { opacity: 0; transform: translateX(-4px); }
   to   { opacity: 1; transform: translateX(0); }

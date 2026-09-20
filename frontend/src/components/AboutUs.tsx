@@ -1,6 +1,6 @@
 import React from 'react';
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { Target, Zap, ShieldCheck, Cpu } from 'lucide-react';
+import { Target, Zap, ShieldCheck, Cpu, Database, BrainCircuit, Server, LayoutDashboard, Activity } from 'lucide-react';
 
 const speedData = [
   { time: '09:00', ms: 35 },
@@ -38,6 +38,68 @@ export default function AboutUs({ dark }: { dark: boolean }) {
           ExecPilot AI is designed to sit alongside you, processing chaos into commitments. 
           It autonomously extracts action items, identifies conflicts, and manages your priorities with zero friction.
         </p>
+      </div>
+
+      {/* Technical Architecture Flow */}
+      <div className="w-full flex flex-col items-center mb-4 mt-2">
+        <h3 className={`text-2xl font-bold mb-10 bg-clip-text text-transparent bg-gradient-to-r ${dark ? 'from-blue-400 to-blue-600' : 'from-orange-400 to-orange-600'}`}>
+          System Architecture
+        </h3>
+        
+        <div className="flex flex-col md:flex-row items-center justify-center w-full max-w-4xl gap-2 md:gap-0">
+          
+          {/* Step 1: Sources */}
+          <div className={`flex flex-col items-center justify-center p-5 rounded-2xl border shadow-sm w-48 h-32 relative z-10 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${dark ? 'bg-[#0a0a0f] border-blue-900/50 hover:border-blue-500' : 'bg-white border-gray-100 hover:border-orange-400'}`}>
+            <Database className={`w-8 h-8 mb-3 ${dark ? 'text-blue-500' : 'text-orange-500'}`} />
+            <span className={`font-bold text-sm ${dark ? 'text-white' : 'text-gray-900'}`}>Raw Sources</span>
+            <span className={`text-xs text-center mt-1 font-medium ${dark ? 'text-blue-300/70' : 'text-gray-500'}`}>Slack, Mail, Cal</span>
+          </div>
+
+          {/* Animated Arrow 1 */}
+          <div className="hidden md:flex flex-1 items-center justify-center h-0.5 relative min-w-[40px] max-w-[80px]">
+            <div className={`absolute w-full border-t-2 border-dashed ${dark ? 'border-blue-900/50' : 'border-gray-200'}`}></div>
+            <Activity className={`w-5 h-5 absolute animate-pulse ${dark ? 'text-blue-400' : 'text-orange-400'}`} />
+          </div>
+          
+          <div className="flex md:hidden h-8 border-l-2 border-dashed border-gray-200 dark:border-blue-900/50 my-1 animate-pulse"></div>
+
+          {/* Step 2: Extraction Engine */}
+          <div className={`flex flex-col items-center justify-center p-5 rounded-2xl border shadow-sm w-48 h-32 relative z-10 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${dark ? 'bg-[#0a0a0f] border-blue-900/50 hover:border-blue-500' : 'bg-white border-gray-100 hover:border-orange-400'}`}>
+            <BrainCircuit className={`w-8 h-8 mb-3 ${dark ? 'text-blue-500' : 'text-orange-500'}`} />
+            <span className={`font-bold text-sm ${dark ? 'text-white' : 'text-gray-900'}`}>LLM Engine</span>
+            <span className={`text-xs text-center mt-1 font-medium ${dark ? 'text-blue-300/70' : 'text-gray-500'}`}>Mistral-8B</span>
+          </div>
+
+          {/* Animated Arrow 2 */}
+          <div className="hidden md:flex flex-1 items-center justify-center h-0.5 relative min-w-[40px] max-w-[80px]">
+            <div className={`absolute w-full border-t-2 border-dashed ${dark ? 'border-blue-900/50' : 'border-gray-200'}`}></div>
+            <Activity className={`w-5 h-5 absolute animate-pulse delay-75 ${dark ? 'text-blue-400' : 'text-orange-400'}`} />
+          </div>
+
+          <div className="flex md:hidden h-8 border-l-2 border-dashed border-gray-200 dark:border-blue-900/50 my-1 animate-pulse delay-75"></div>
+
+          {/* Step 3: Fast API */}
+          <div className={`flex flex-col items-center justify-center p-5 rounded-2xl border shadow-sm w-48 h-32 relative z-10 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${dark ? 'bg-[#0a0a0f] border-blue-900/50 hover:border-blue-500' : 'bg-white border-gray-100 hover:border-orange-400'}`}>
+            <Server className={`w-8 h-8 mb-3 ${dark ? 'text-blue-500' : 'text-orange-500'}`} />
+            <span className={`font-bold text-sm ${dark ? 'text-white' : 'text-gray-900'}`}>Decision Logic</span>
+            <span className={`text-xs text-center mt-1 font-medium ${dark ? 'text-blue-300/70' : 'text-gray-500'}`}>FastAPI Backend</span>
+          </div>
+          
+          {/* Animated Arrow 3 */}
+          <div className="hidden md:flex flex-1 items-center justify-center h-0.5 relative min-w-[40px] max-w-[80px]">
+            <div className={`absolute w-full border-t-2 border-dashed ${dark ? 'border-blue-900/50' : 'border-gray-200'}`}></div>
+            <Activity className={`w-5 h-5 absolute animate-pulse delay-150 ${dark ? 'text-blue-400' : 'text-orange-400'}`} />
+          </div>
+
+          <div className="flex md:hidden h-8 border-l-2 border-dashed border-gray-200 dark:border-blue-900/50 my-1 animate-pulse delay-150"></div>
+
+          {/* Step 4: UI Dashboard */}
+          <div className={`flex flex-col items-center justify-center p-5 rounded-2xl border w-48 h-32 relative z-10 transition-all duration-300 hover:-translate-y-1 ${dark ? 'bg-[#050505] border-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.2)]' : 'bg-white border-orange-400 shadow-[0_0_15px_rgba(249,115,22,0.15)]'}`}>
+            <LayoutDashboard className={`w-8 h-8 mb-3 ${dark ? 'text-blue-500' : 'text-orange-500'}`} />
+            <span className={`font-bold text-sm ${dark ? 'text-white' : 'text-gray-900'}`}>ExecPilot UI</span>
+            <span className={`text-xs text-center mt-1 font-medium ${dark ? 'text-blue-300/70' : 'text-gray-500'}`}>Next.js App</span>
+          </div>
+        </div>
       </div>
 
       {/* Metrics Grid */}

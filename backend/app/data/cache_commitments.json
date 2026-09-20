@@ -1,0 +1,97 @@
+[
+  {
+    "id": "C001",
+    "action": "Send updated vendor list to Raghav",
+    "owner": "Arjun Malhotra",
+    "waiting_on": null,
+    "deadline": "2026-09-23 morning",
+    "status": "overdue",
+    "priority": "high",
+    "confidence": "high",
+    "evidence": [
+      {
+        "source_type": "meeting",
+        "source_id": "Leadership Sync",
+        "text": "I told Raghav I'd send him the updated vendor list."
+      },
+      {
+        "source_type": "email",
+        "source_id": "Vendor List",
+        "text": "will send by tomorrow (Wednesday) morning for sure."
+      },
+      {
+        "source_type": "voice_note",
+        "source_id": "Voice Note 1",
+        "text": "need to get Raghav that vendor list, remind me."
+      }
+    ]
+  },
+  {
+    "id": "C002",
+    "action": "Review Q3 campaign deck",
+    "owner": "Arjun Malhotra",
+    "waiting_on": "Neha Kapoor",
+    "deadline": "2026-09-24 09:30",
+    "status": "ready",
+    "priority": "high",
+    "confidence": "high",
+    "evidence": [
+      {
+        "source_type": "email",
+        "source_id": "Q3 Campaign Deck",
+        "text": "Let's say 9:30 AM Thursday, before your board prep block."
+      }
+    ]
+  },
+  {
+    "id": "C003",
+    "action": "July expense variance report",
+    "owner": "Divya Rao",
+    "waiting_on": "Divya Rao",
+    "deadline": "2026-09-23 evening",
+    "status": "completed",
+    "priority": "medium",
+    "confidence": "high",
+    "evidence": [
+      {
+        "source_type": "email",
+        "source_id": "Expense Variance Report",
+        "text": "Report attached, sent as promised."
+      }
+    ]
+  },
+  {
+    "id": "C004",
+    "action": "Confirm ownership of Mumbai office lease renewal",
+    "owner": null,
+    "waiting_on": null,
+    "deadline": "2026-09-25 end of day",
+    "status": "unowned",
+    "priority": "critical",
+    "confidence": "high",
+    "evidence": [
+      {
+        "source_type": "email",
+        "source_id": "Mumbai Office Lease Renewal",
+        "text": "still unowned - can you confirm who's handling it?"
+      }
+    ]
+  },
+  {
+    "id": "C005",
+    "action": "Reconfirm Meridian Logistics call",
+    "owner": "Arjun Malhotra",
+    "waiting_on": "Priya Nair",
+    "deadline": "2026-09-23 15:00",
+    "status": "completed",
+    "priority": "high",
+    "confidence": "high",
+    "evidence": [
+      {
+        "source_type": "email",
+        "source_id": "Call Reschedule",
+        "text": "Yes, confirmed, see you at 3."
+      }
+    ]
+  }
+]

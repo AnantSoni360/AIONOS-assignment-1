@@ -13,15 +13,22 @@ It uses AI to extract intent, and deterministic code to resolve ownership, dedup
 - **Daily Action Dashboard:** White/Orange enterprise UI showing Action summaries, today's attention, and an "Ask ExecPilot" Q&A feature.
 
 ## Tech Stack
-- **Frontend:** Next.js (React), Tailwind CSS, Lucide Icons
-- **Backend:** FastAPI (Python), Uvicorn
-- **LLM:** Mistral AI (For candidate extraction)
-- **Data:** JSON-based persistence (Prototype)
+- **Frontend:** Next.js (React), Tailwind CSS
+- **Backend:** FastAPI (Python)
+- **LLM:** Mistral AI
 
 ## How to Run
 
 ### 1. Run the Backend
-```powershell
+```bash
+# Mac/Linux:
+cd backend
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+
+# Windows (PowerShell):
 cd backend
 python -m venv venv
 .\venv\Scripts\Activate.ps1
@@ -31,15 +38,20 @@ uvicorn app.main:app --reload
 Backend will run on `http://127.0.0.1:8000`.
 
 ### 2. Run the Frontend
-```powershell
+```bash
+# Mac/Linux:
+cd frontend
+npm install
+npm run dev
+
+# Windows (PowerShell):
 cd frontend
 npm.cmd install
 npm.cmd run dev
 ```
 Frontend will run on `http://localhost:3000`.
 
-*(Note: On Windows PowerShell, if you face an execution policy error, use `npm.cmd` instead of `npm` or run `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted`)*
+## System Architecture & The "One Story"
+- **Mistral AI (Extraction Layer):** The LLM's only job is to read the messy, unstructured text (emails, transcripts, voice notes) and extract raw "commitments" and pieces of "evidence". It does NOT do date math or assign ownership.
+- **Deterministic Python (Resolution Layer):** The `decision_engine.py` is entirely deterministic. It filters evidence based on the "Time Machine" clock (preventing future leaks), resolves the final status (e.g. `overdue` vs `pending`) using strict `datetime` math, and enforces the Ownership Guard (preventing hallucinated owners).
 
-## AI Tools Used
-- Mistral-small-latest (Agentic Extraction Layer)
-- Gemini (Code Generation & Planning)

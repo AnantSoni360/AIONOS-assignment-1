@@ -5,6 +5,7 @@ class Evidence(BaseModel):
     source_type: str
     source_id: str
     text: str
+    timestamp: str
 
 class Commitment(BaseModel):
     id: str

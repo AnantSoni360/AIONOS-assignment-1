@@ -1,90 +1,30 @@
-# ExecPilot AI: Architecture & Process Flow
+# System Architecture
 
-## 1. High-Level Architecture (Reusable Agentic Pipeline)
+The ExecPilot Agent uses a decoupled, traceable architecture to ensure reliability and trust.
 
-The architecture is designed as one reusable Agentic Decision Pipeline that can power three possible business applications. While this working prototype deeply implements **Case 1 (Executive Productivity Agent)**, the engine is built to support internal service and customer-facing cases as well.
+## Core Principles
+1. **LLMs are for Extraction, not Logic:** The LLM (Mistral AI) is exclusively used to read messy text (emails, transcripts) and extract raw actions and evidence quotes. It is expressly forbidden from doing date math or assigning ownership.
+2. **Deterministic Resolution:** A Python decision engine (`decision_engine.py`) takes the extracted data and deterministically calculates the state (e.g. `overdue` vs `pending`) using strict `datetime` math.
+3. **Ownership Guard:** If the LLM extraction does not produce a clear owner from the text, the Python engine intercepts the task and flags it as `unowned` and `critical`.
 
-```text
-                 ┌──────────────────────────┐
-                 │       DATA SOURCES       │
-                 │ Email • Meeting • Voice  │
-                 │ Calendar • Documents     │
-                 └────────────┬─────────────┘
-                              ↓
-                 ┌──────────────────────────┐
-                 │    AGENTIC AI ENGINE     │
-                 │                          │
-                 │ Extract → Normalize      │
-                 │ Deduplicate → Validate   │
-                 │ Decide → Track Evidence  │
-                 └────────────┬─────────────┘
-                              ↓
-              ┌───────────────┼────────────────┐
-              ↓               ↓                ↓
-        Executive         Internal         Customer
-       Productivity        Service         Resolution
-          Agent             Agent             Agent
-              ↓               ↓                ↓
-        Action Brief       Resolve /        Recommend /
-        + Q&A               Escalate          Execute
-              └───────────────┼────────────────┘
-                              ↓
-                 ┌──────────────────────────┐
-                 │   AUDITABLE OUTCOME      │
-                 │ Action + Owner + Status  │
-                 │ Evidence + Audit Trail   │
-                 └──────────────────────────┘
+## Process Flow
+
+```mermaid
+flowchart TD
+    A[Raw Inputs: Emails, Transcripts, Voice] --> B(FastAPI Backend)
+    
+    subagent1[Mistral AI LLM]
+    B -- Sends Unstructured Text --> subagent1
+    subagent1 -- Returns Structured JSON (Pydantic) --> B
+
+    C[Decision Engine Python]
+    B --> C
+    C -- Time-Travel Filtering (as_of) --> C
+    C -- Resolves Dates & Deadlines --> C
+    C -- Enforces Ownership Guard --> C
+
+    C -- Clean JSON Payload --> D[Next.js Dashboard]
 ```
 
-## 2. Implemented Flow: Executive Productivity Agent (Case 1)
-
-For the ExecPilot implementation, the flow specifically turns messy executive inputs into a reliable daily action brief.
-
-```text
-                    ┌───────────────────┐
-                    │ SUPPLIED DATA PACK│
-                    └─────────┬─────────┘
-                              ↓
-                       SOURCE INGESTION
-                              ↓
-                  ┌──────────────────────┐
-                  │ Meeting              │
-                  │ Email                │
-                  │ Calendar             │
-                  │ Voice                │
-                  └──────────┬───────────┘
-                             ↓
-                       MISTRAL EXTRACTION
-                             ↓
-                    CANDIDATE COMMITMENTS
-                             ↓
-                    NORMALIZATION ENGINE
-                             ↓
-                   DEDUPLICATION ENGINE
-                             ↓
-                    DEADLINE RESOLUTION
-                             ↓
-                    OWNERSHIP GUARD
-                             ↓
-                    STATUS RESOLUTION
-                             ↓
-                  ┌─────────────────────┐
-                  │ TRUSTED COMMITMENTS │
-                  └──────────┬──────────┘
-                             ↓
-                ┌────────────┴────────────┐
-                ↓                         ↓
-         DAILY EXECUTIVE BRIEF       ASK EXECPILOT
-                ↓                         ↓
-             DASHBOARD             ANSWER + EVIDENCE
-```
-
-## 3. Component Breakdown
-
-1. **Mistral Extractor Layer:** Uses Mistral API (or mocked equivalent for deterministic demos) to perform NLP over raw text and identify intent (actions, people, dates).
-2. **Deduplicator Engine (Python):** Identifies overlapping commitments (e.g., the Vendor List mentioned in a meeting, an email, and a voice note) and merges them into a single trackable task while retaining the full evidence graph.
-3. **Decision & Guard Layer (Python):** 
-   - Calculates `overdue` vs `completed` state based on hardcoded dates.
-   - **Ownership Guard:** Validates if an explicit owner was assigned. If not (like the Mumbai lease), it rejects assumptions and forces the task into `UNOWNED` status.
-4. **FastAPI Backend:** Serves the structured, verified data as a REST API (`/api/brief`).
-5. **Next.js Frontend:** Provides an executive dashboard with clear actionable alerts and traceable evidence.
+## Time-Machine Capabilities
+The decision engine supports an `as_of` timestamp. This allows the backend to filter out any "future" evidence relative to the simulation clock. This is critical for demonstrating how the agent dynamically updates states as time passes (e.g. Wednesday morning vs Wednesday evening).

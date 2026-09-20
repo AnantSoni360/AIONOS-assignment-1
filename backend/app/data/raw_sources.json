@@ -2,45 +2,175 @@
   {
     "type": "meeting_transcript",
     "id": "Leadership Sync",
-    "date": "2026-09-21",
-    "content": "Arjun: I told Raghav I'd send him the updated vendor list. Divya: What about the Mumbai Office Lease Renewal? I think it sits with Facilities but it's still unowned - can you confirm who's handling it by end of week?"
+    "timestamp": "2026-09-21T09:35:00",
+    "content": "Arjun: Let's keep this quick. Neha, where are we on the Q3 campaign deck? Neha: Draft is 80% done. I'll send it to Arjun for review by Wednesday. Arjun: Good. Also, remind me \u2014 I told Raghav I'd send him the updated vendor list. I'll get that to him by end of day tomorrow. Raghav: Appreciated. Separately, the Mumbai office renewal paperwork needs someone to sign off this week. Not sure whose desk that's on right now. Divya: I think that's supposed to be Facilities, but I haven't seen anyone pick it up. Arjun: Okay, flag it, don't assume. Divya, can you also pull the July expense variance report before Thursday's board prep? Divya: Yes, I'll have it ready Wednesday evening. Arjun: One more thing \u2014 client call with Meridian Logistics got pushed. I need to reconfirm the new time with their team myself. Neha: Also, just a reminder, the campaign deck review \u2014 I said Wednesday, but realistically Thursday morning is safer. Arjun: Noted. Let's close here."
   },
   {
     "type": "email",
-    "id": "Vendor List",
-    "date": "2026-09-22",
-    "sender": "Arjun Malhotra",
-    "recipient": "Raghav",
-    "content": "Raghav, I am reviewing the data. I will send by tomorrow (Wednesday) morning for sure."
+    "id": "Thread 1 - Vendor List 1",
+    "timestamp": "2026-09-21T09:50:00",
+    "content": "From: raghav.sethi... To: arjun.malhotra... \"Following up from the sync \u2014 can you send the updated vendor list today?\""
+  },
+  {
+    "type": "email",
+    "id": "Thread 1 - Vendor List 2",
+    "timestamp": "2026-09-21T17:40:00",
+    "content": "From: arjun.malhotra... To: raghav.sethi... \"Running behind, will send first thing tomorrow morning instead.\""
+  },
+  {
+    "type": "email",
+    "id": "Thread 1 - Vendor List 3",
+    "timestamp": "2026-09-22T09:15:00",
+    "content": "From: raghav.sethi... To: arjun.malhotra... \"No worries, whenever you get a chance today works.\""
+  },
+  {
+    "type": "email",
+    "id": "Thread 1 - Vendor List 4",
+    "timestamp": "2026-09-22T18:30:00",
+    "content": "From: arjun.malhotra... To: raghav.sethi... \"Sorry, got pulled into board prep \u2014 will send by tomorrow (Wednesday) morning for sure.\""
+  },
+  {
+    "type": "email",
+    "id": "Thread 1 - Vendor List 5",
+    "timestamp": "2026-09-23T08:45:00",
+    "content": "From: raghav.sethi... To: arjun.malhotra... \"Just checking \u2014 still good for this morning?\""
+  },
+  {
+    "type": "email",
+    "id": "Thread 2 - Q3 Campaign Deck 1",
+    "timestamp": "2026-09-21T11:00:00",
+    "content": "From: neha.kapoor... To: arjun.malhotra... \"Deck's coming together, still targeting Wednesday for your review.\""
+  },
+  {
+    "type": "email",
+    "id": "Thread 2 - Q3 Campaign Deck 2",
+    "timestamp": "2026-09-22T16:15:00",
+    "content": "From: neha.kapoor... To: arjun.malhotra... \"Heads up \u2014 shifting the review to Thursday morning instead of Wednesday, need one more day on the data slides.\""
+  },
+  {
+    "type": "email",
+    "id": "Thread 2 - Q3 Campaign Deck 3",
+    "timestamp": "2026-09-23T10:00:00",
+    "content": "From: arjun.malhotra... To: neha.kapoor... \"Understood, Thursday morning works. What time exactly?\""
+  },
+  {
+    "type": "email",
+    "id": "Thread 2 - Q3 Campaign Deck 4",
+    "timestamp": "2026-09-23T10:20:00",
+    "content": "From: neha.kapoor... To: arjun.malhotra... \"Let's say 9:30 AM Thursday, before your board prep block.\""
+  },
+  {
+    "type": "email",
+    "id": "Thread 2 - Q3 Campaign Deck 5",
+    "timestamp": "2026-09-24T08:00:00",
+    "content": "From: neha.kapoor... To: arjun.malhotra... \"Deck is ready, attaching the draft ahead of our 9:30 review.\""
+  },
+  {
+    "type": "email",
+    "id": "Thread 3 - Call Reschedule 1",
+    "timestamp": "2026-09-21T13:00:00",
+    "content": "From: priya.nair... To: arjun.malhotra... \"Our scheduled call this week got bumped from our side \u2014 can you propose a new time? We're flexible Tuesday\u2013Thursday afternoons.\""
+  },
+  {
+    "type": "email",
+    "id": "Thread 3 - Call Reschedule 2",
+    "timestamp": "2026-09-22T15:00:00",
+    "content": "From: arjun.malhotra... To: priya.nair... \"Apologies for the delay \u2014 how about Wednesday 3:00 PM?\""
+  },
+  {
+    "type": "email",
+    "id": "Thread 3 - Call Reschedule 3",
+    "timestamp": "2026-09-22T17:45:00",
+    "content": "From: priya.nair... To: arjun.malhotra... \"Wednesday 3 PM works on our end, confirmed.\""
+  },
+  {
+    "type": "email",
+    "id": "Thread 3 - Call Reschedule 4",
+    "timestamp": "2026-09-23T13:30:00",
+    "content": "From: priya.nair... To: arjun.malhotra... \"Quick check \u2014 still on for 3 PM today?\""
+  },
+  {
+    "type": "email",
+    "id": "Thread 3 - Call Reschedule 5",
+    "timestamp": "2026-09-23T14:00:00",
+    "content": "From: arjun.malhotra... To: priya.nair... \"Yes, confirmed, see you at 3.\""
+  },
+  {
+    "type": "email",
+    "id": "Thread 4 - Expense Variance Report 1",
+    "timestamp": "2026-09-21T14:30:00",
+    "content": "From: divya.rao... To: arjun.malhotra... \"Starting on the July variance numbers, targeting Thursday morning for board prep as discussed.\""
+  },
+  {
+    "type": "email",
+    "id": "Thread 4 - Expense Variance Report 2",
+    "timestamp": "2026-09-22T09:00:00",
+    "content": "From: arjun.malhotra... To: divya.rao... \"Actually, can I get it by Wednesday evening instead? Want time to review before Thursday.\""
+  },
+  {
+    "type": "email",
+    "id": "Thread 4 - Expense Variance Report 3",
+    "timestamp": "2026-09-22T09:40:00",
+    "content": "From: divya.rao... To: arjun.malhotra... \"Wednesday evening is tight but doable, I'll prioritize it.\""
+  },
+  {
+    "type": "email",
+    "id": "Thread 4 - Expense Variance Report 4",
+    "timestamp": "2026-09-23T18:00:00",
+    "content": "From: divya.rao... To: arjun.malhotra... \"Report attached, sent as promised.\""
+  },
+  {
+    "type": "email",
+    "id": "Thread 4 - Expense Variance Report 5",
+    "timestamp": "2026-09-23T18:10:00",
+    "content": "From: arjun.malhotra... To: divya.rao... \"Got it, thank you \u2014 exactly what I needed before tomorrow.\""
+  },
+  {
+    "type": "email",
+    "id": "Thread 5 - Mumbai Office Lease Renewal 1",
+    "timestamp": "2026-09-21T10:15:00",
+    "content": "From: facilities... To: All Staff \"Reminder: the Mumbai office lease renewal requires an authorized signature by Friday, 25 September.\""
+  },
+  {
+    "type": "email",
+    "id": "Thread 5 - Mumbai Office Lease Renewal 2",
+    "timestamp": "2026-09-22T11:00:00",
+    "content": "From: raghav.sethi... To: arjun.malhotra..., divya.rao... \"Following up from the sync \u2014 has anyone confirmed who's signing off on the Mumbai renewal? Don't think it's been assigned.\""
+  },
+  {
+    "type": "email",
+    "id": "Thread 5 - Mumbai Office Lease Renewal 3",
+    "timestamp": "2026-09-23T09:30:00",
+    "content": "From: divya.rao... To: raghav.sethi..., arjun.malhotra... \"Not on my end \u2014 I believe this typically sits with Facilities directly, not us.\""
+  },
+  {
+    "type": "email",
+    "id": "Thread 5 - Mumbai Office Lease Renewal 4",
+    "timestamp": "2026-09-24T16:00:00",
+    "content": "From: facilities... To: All Staff \"Second reminder: signature is still pending. Deadline is Friday, 25 September, end of day.\""
+  },
+  {
+    "type": "email",
+    "id": "Thread 5 - Mumbai Office Lease Renewal 5",
+    "timestamp": "2026-09-24T16:45:00",
+    "content": "From: raghav.sethi... To: arjun.malhotra... \"This is now one day out and still unowned \u2014 can you confirm who's handling it?\""
   },
   {
     "type": "voice_note",
     "id": "Voice Note 1",
-    "date": "2026-09-22",
-    "content": "I need to get Raghav that vendor list, remind me."
+    "timestamp": "2026-09-21T18:40:00",
+    "content": "Quick note to self \u2014 need to get Raghav that vendor list, I think I said today but it might slip to tomorrow morning, remind me. Also still haven't heard back on the Mumbai lease thing, someone needs to own that, I don't think it's me."
   },
   {
-    "type": "email",
-    "id": "Q3 Campaign Deck",
-    "date": "2026-09-22",
-    "sender": "Neha Kapoor",
-    "recipient": "Arjun Malhotra",
-    "content": "Arjun, I'll have the Q3 campaign deck ready for you to review. Let's say 9:30 AM Thursday, before your board prep block."
+    "type": "voice_note",
+    "id": "Voice Note 2",
+    "timestamp": "2026-09-23T08:15:00",
+    "content": "Reminder \u2014 expense variance report from Divya needs to be in my hands by Wednesday evening, not Thursday, I want time to go through it before board prep. Also Meridian call \u2014 I owe Priya a time, need to lock that in today."
   },
   {
-    "type": "email",
-    "id": "Expense Variance Report",
-    "date": "2026-09-23",
-    "sender": "Divya Rao",
-    "recipient": "Arjun Malhotra",
-    "content": "Arjun, July expense variance report attached, sent as promised."
-  },
-  {
-    "type": "email",
-    "id": "Call Reschedule",
-    "date": "2026-09-23",
-    "sender": "Priya Nair",
-    "recipient": "Arjun Malhotra",
-    "content": "Yes, confirmed, see you at 3 for the Meridian Logistics call."
+    "type": "calendar_event",
+    "id": "Arjun Calendar - Board Prep",
+    "timestamp": "2026-09-21T00:00:00",
+    "content": "Event: Board Prep Session. Time: Thu 24 Sep, 9:00\u201310:00 AM. Owner: Arjun Malhotra"
   }
 ]

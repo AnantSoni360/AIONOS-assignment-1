@@ -8,7 +8,7 @@ export default function Dashboard() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [selectedCommitment, setSelectedCommitment] = useState<any>(null);
-  const [asOfDate, setAsOfDate] = useState('2026-09-23');
+  const [asOfDate, setAsOfDate] = useState('2026-09-21T09:00:00');
   
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState<string | null>(null);
@@ -104,11 +104,11 @@ export default function Dashboard() {
               onChange={(e) => setAsOfDate(e.target.value)}
               className="bg-white border border-orange-200 text-sm rounded px-2 py-1 outline-none focus:ring-2 focus:ring-orange-500"
             >
-              <option value="2026-09-21">Mon, Sept 21</option>
-              <option value="2026-09-22">Tue, Sept 22</option>
-              <option value="2026-09-23">Wed, Sept 23 (Today)</option>
-              <option value="2026-09-24">Thu, Sept 24</option>
-              <option value="2026-09-25">Fri, Sept 25</option>
+              <option value="2026-09-21T09:00:00">Mon 9:00 AM (Start)</option>
+              <option value="2026-09-23T08:45:00">Wed 8:45 AM (Raghav check-in)</option>
+              <option value="2026-09-23T18:10:00">Wed 6:10 PM (Expense report)</option>
+              <option value="2026-09-24T16:45:00">Thu 4:45 PM (Mumbai lease escalated)</option>
+              <option value="2026-09-25T17:00:00">Fri 5:00 PM (End of week)</option>
             </select>
           </div>
         </div>
@@ -179,40 +179,79 @@ export default function Dashboard() {
         <>
           {/* Top Metric Cards */}
           <div className="grid grid-cols-4 gap-4">
-            <MetricCard title="Total Actions" value={data.summary.total} icon={<Briefcase className="w-5 h-5 text-blue-500" />} />
-            <MetricCard title="Overdue" value={data.summary.overdue} icon={<AlertCircle className="w-5 h-5 text-red-500" />} />
-            <MetricCard title="Waiting On" value={data.summary.waiting_on_others} icon={<Clock className="w-5 h-5 text-orange-500" />} />
-            <MetricCard title="Unowned" value={data.summary.unowned} icon={<AlertCircle className="w-5 h-5 text-yellow-500" />} />
+            <MetricCard title="Total Actions" value={data.commitments.length} icon={<Briefcase className="w-5 h-5 text-blue-500" />} />
+            <MetricCard title="Overdue" value={data.commitments.filter((c:any) => c.status === 'overdue').length} icon={<AlertCircle className="w-5 h-5 text-red-500" />} />
+            <MetricCard title="My Actions" value={data.commitments.filter((c:any) => c.owner === 'Arjun Malhotra' && !c.waiting_on).length} icon={<Clock className="w-5 h-5 text-orange-500" />} />
+            <MetricCard title="Waiting / Unowned" value={data.commitments.filter((c:any) => c.owner !== 'Arjun Malhotra' || c.waiting_on).length} icon={<AlertCircle className="w-5 h-5 text-yellow-500" />} />
           </div>
 
           {/* Main Content Columns */}
           <div className="grid grid-cols-3 gap-8">
             
-            {/* Left Col: Today's Actions */}
-            <div className="col-span-2 flex flex-col gap-4">
-              <div className="flex justify-between items-center border-b border-gray-200 pb-2">
-                <h2 className="text-lg font-bold">TODAY'S ATTENTION</h2>
-                {loading && <RefreshCw className="w-4 h-4 animate-spin text-gray-400" />}
-              </div>
-              <div className="flex flex-col gap-3">
-                {data.commitments.map((c: any) => (
-                  <div 
-                    key={c.id} 
-                    onClick={() => setSelectedCommitment(c)}
-                    className={`bg-white p-4 rounded-xl shadow-sm border cursor-pointer hover:shadow-md transition-all flex justify-between items-center ${c.status === 'overdue' ? 'border-red-200 bg-red-50' : c.status === 'unowned' ? 'border-yellow-200 bg-yellow-50' : 'border-gray-100 hover:border-orange-300'}`}
-                  >
-                    <div className="flex items-start gap-3">
-                      <StatusIcon status={c.status} />
-                      <div>
-                        <h3 className="font-medium">{c.action}</h3>
-                        <p className="text-xs text-gray-500 mt-1">
-                          <span className={`font-bold uppercase ${c.status === 'overdue' ? 'text-red-600' : ''}`}>{c.status}</span> · Deadline: {c.deadline}
-                        </p>
+            {/* Left Col: Actions List */}
+            <div className="col-span-2 flex flex-col gap-6">
+              <div>
+                <div className="flex justify-between items-center border-b border-gray-200 pb-2 mb-4">
+                  <h2 className="text-lg font-bold">MY ACTIONS</h2>
+                  {loading && <RefreshCw className="w-4 h-4 animate-spin text-gray-400" />}
+                </div>
+                <div className="flex flex-col gap-3">
+                  {data.commitments.filter((c:any) => c.owner === 'Arjun Malhotra' && !c.waiting_on).map((c: any) => (
+                    <div 
+                      key={c.id} 
+                      onClick={() => setSelectedCommitment(c)}
+                      className={`bg-white p-4 rounded-xl shadow-sm border cursor-pointer hover:shadow-md transition-all flex justify-between items-center ${c.status === 'overdue' ? 'border-red-200 bg-red-50' : c.status === 'unowned' ? 'border-yellow-200 bg-yellow-50' : 'border-gray-100 hover:border-orange-300'}`}
+                    >
+                      <div className="flex items-start gap-3">
+                        <StatusIcon status={c.status} />
+                        <div>
+                          <h3 className="font-medium">{c.action}</h3>
+                          <p className="text-xs text-gray-500 mt-1">
+                            <span className={`font-bold uppercase ${c.status === 'overdue' ? 'text-red-600' : ''}`}>{c.status}</span> · Deadline: {c.deadline}
+                          </p>
+                          {c.id === "q3-campaign-deck-002" && (
+                            <p className="text-xs font-bold text-red-600 mt-1 flex items-center gap-1">
+                              <AlertCircle className="w-3 h-3"/> CALENDAR CONFLICT: Collides with Board Prep Session (Thu 9:00-10:00 AM)
+                            </p>
+                          )}
+                        </div>
                       </div>
+                      <ChevronRight className="text-gray-400" />
                     </div>
-                    <ChevronRight className="text-gray-400" />
-                  </div>
-                ))}
+                  ))}
+                  {data.commitments.filter((c:any) => c.owner === 'Arjun Malhotra' && !c.waiting_on).length === 0 && (
+                     <p className="text-gray-500 text-sm italic py-4">No actions for you right now.</p>
+                  )}
+                </div>
+              </div>
+
+              <div>
+                <div className="flex justify-between items-center border-b border-gray-200 pb-2 mb-4">
+                  <h2 className="text-lg font-bold text-gray-600">WAITING ON / UNOWNED</h2>
+                </div>
+                <div className="flex flex-col gap-3">
+                  {data.commitments.filter((c:any) => c.owner !== 'Arjun Malhotra' || c.waiting_on).map((c: any) => (
+                    <div 
+                      key={c.id} 
+                      onClick={() => setSelectedCommitment(c)}
+                      className={`bg-white p-4 rounded-xl shadow-sm border cursor-pointer hover:shadow-md transition-all flex justify-between items-center ${c.status === 'overdue' ? 'border-red-200 bg-red-50' : c.status === 'unowned' ? 'border-yellow-200 bg-yellow-50' : 'border-gray-100 hover:border-orange-300'}`}
+                    >
+                      <div className="flex items-start gap-3">
+                        <StatusIcon status={c.status} />
+                        <div>
+                          <h3 className="font-medium text-gray-700">{c.action}</h3>
+                          <p className="text-xs text-gray-500 mt-1">
+                            <span className={`font-bold uppercase ${c.status === 'overdue' ? 'text-red-600' : ''}`}>{c.status}</span> · Waiting On: <span className="font-bold">{c.waiting_on || "UNCONFIRMED"}</span>
+                          </p>
+                        </div>
+                      </div>
+                      <ChevronRight className="text-gray-400" />
+                    </div>
+                  ))}
+                  {data.commitments.filter((c:any) => c.owner !== 'Arjun Malhotra' || c.waiting_on).length === 0 && (
+                     <p className="text-gray-500 text-sm italic py-4">Nothing waiting on others.</p>
+                  )}
+                </div>
               </div>
             </div>
 

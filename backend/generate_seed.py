@@ -1,10 +1,13 @@
-{
+import json
+import os
+
+data = {
     "commitments": [
         {
             "id": "vendor-list-001",
             "action": "Send updated vendor list to Raghav",
             "owner": "Arjun Malhotra",
-            "waiting_on": null,
+            "waiting_on": None,
             "deadline": "2026-09-23T12:00:00",
             "status": "pending",
             "priority": "high",
@@ -153,8 +156,8 @@
         {
             "id": "mumbai-lease-004",
             "action": "Confirm ownership of Mumbai office lease renewal",
-            "owner": null,
-            "waiting_on": null,
+            "owner": None,
+            "waiting_on": None,
             "deadline": "2026-09-25T17:00:00",
             "status": "pending",
             "priority": "high",
@@ -208,7 +211,7 @@
             "id": "meridian-call-005",
             "action": "Reconfirm Meridian Logistics call time with Priya",
             "owner": "Arjun Malhotra",
-            "waiting_on": null,
+            "waiting_on": None,
             "deadline": "2026-09-23T15:00:00",
             "status": "pending",
             "priority": "medium",
@@ -260,3 +263,8 @@
         }
     ]
 }
+
+path = os.path.join(os.path.dirname(__file__), "app", "data", "seed_data.json")
+with open(path, "w", encoding="utf-8") as f:
+    json.dump(data, f, indent=4)
+print("Generated seed_data.json successfully!")

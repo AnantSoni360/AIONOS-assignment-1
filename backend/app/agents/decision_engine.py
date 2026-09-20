@@ -1,46 +1,55 @@
 from datetime import datetime
 
-def process_commitments(commitments: list, as_of_date_str: str = "2026-09-23") -> list:
-    # Convert string to date object for comparison
+def process_commitments(commitments: list, as_of_date_str: str = "2026-09-23T09:00:00") -> list:
+    # Use time-of-day parsing
     try:
-        as_of = datetime.strptime(as_of_date_str, "%Y-%m-%d")
+        # E.g. "2026-09-23T08:45:00"
+        as_of = datetime.fromisoformat(as_of_date_str)
     except ValueError:
-        as_of = datetime.strptime("2026-09-23", "%Y-%m-%d")
+        as_of = datetime.fromisoformat("2026-09-23T09:00:00")
 
+    valid_commitments = []
     for c in commitments:
+        # Filter evidence based on the "time travel" clock
+        valid_evidence = []
+        for ev in c.get("evidence", []):
+            ev_time = datetime.fromisoformat(ev.get("timestamp", "2026-09-21T00:00:00"))
+            if ev_time <= as_of:
+                valid_evidence.append(ev)
+        
+        # If this commitment has no evidence up to this point in time, it hasn't happened yet
+        if not valid_evidence:
+            continue
+            
+        c["evidence"] = valid_evidence
+
         # Ownership Guard
         if not c.get("owner"):
             c["status"] = "unowned"
             c["priority"] = "critical"
+            valid_commitments.append(c)
             continue
 
-        # Status is pre-set to completed via LLM if explicitly done
         if c.get("status") == "completed":
+            valid_commitments.append(c)
             continue
 
         # Deadline Math
-        deadline_str = c.get("deadline", "")
-        # Attempt to extract YYYY-MM-DD from the deadline string
-        # For this prototype, we'll do simple string comparison or hardcoded logic 
-        # since the extracted strings are "2026-09-23 morning" etc.
+        deadline_str = c.get("deadline")
+        if deadline_str:
+            try:
+                deadline = datetime.fromisoformat(deadline_str)
+                if as_of > deadline:
+                    c["status"] = "overdue"
+                    c["priority"] = "critical"
+                else:
+                    c["status"] = "pending"
+            except ValueError:
+                c["status"] = "pending"
+        else:
+            c["status"] = "pending"
+            
+        valid_commitments.append(c)
         
-        if "2026-09-21" in deadline_str or "2026-09-22" in deadline_str:
-            # If deadline is before our 2026-09-23 baseline
-            c["status"] = "overdue"
-        elif "2026-09-23" in deadline_str:
-            if as_of > datetime.strptime("2026-09-23", "%Y-%m-%d"):
-                c["status"] = "overdue"
-            else:
-                c["status"] = "pending"
-        elif "2026-09-24" in deadline_str:
-            if as_of > datetime.strptime("2026-09-24", "%Y-%m-%d"):
-                c["status"] = "overdue"
-            else:
-                c["status"] = "pending"
-        elif "2026-09-25" in deadline_str:
-            if as_of > datetime.strptime("2026-09-25", "%Y-%m-%d"):
-                c["status"] = "overdue"
-            else:
-                c["status"] = "pending"
-        
-    return commitments
+    return valid_commitments
+

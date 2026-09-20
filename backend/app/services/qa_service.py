@@ -165,7 +165,19 @@ USER QUESTION: {question}
                 json=payload,
                 timeout=20
             )
+            if response.status_code == 429:
+                return (
+                    "The AI service is rate-limited right now. "
+                    "Try one of the suggested questions which work without the AI: "
+                    "'What did I promise Raghav?', 'What needs action today?', "
+                    "'Who owns the Mumbai lease?', 'What did I promise Priya?', "
+                    "'Did Divya send the expense report?', "
+                    "'Do I have any meeting conflicts on Thursday?'"
+                )
             response.raise_for_status()
             return response.json()["choices"][0]["message"]["content"]
         except Exception as e:
-            return f"Error calling AI: {str(e)}"
+            return (
+                f"Unable to reach AI service ({type(e).__name__}). "
+                "Try one of the suggested questions which always work offline."
+            )

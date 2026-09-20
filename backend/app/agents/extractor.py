@@ -93,6 +93,9 @@ INPUT SOURCES:
                 json=payload,
                 timeout=60
             )
+            if response.status_code == 429:
+                print("Mistral rate limit (429) — falling back to seed_data.json")
+                return _load_seed_fallback()
             response.raise_for_status()
             result = response.json()
         except (httpx.HTTPError, httpx.TimeoutException) as e:

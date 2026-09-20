@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { CheckCircle, AlertCircle, Clock, Search, ChevronRight, X, Briefcase, Calendar, RefreshCw, Send, Terminal, Bot, User, Mic, MicOff, Moon, Sun, Zap, TrendingUp } from 'lucide-react';
+import { Briefcase, AlertCircle, Clock, CheckCircle, ChevronRight, Terminal, Calendar, RefreshCw, Send, Bot, Search, X, Mic, MicOff, Sun, Moon, Info, Zap, TrendingUp, User } from 'lucide-react';
+import AboutUs from './AboutUs';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
 
@@ -165,7 +166,7 @@ export default function Dashboard() {
     setIsListening(false);
   }, []);
 
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'raw'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'raw' | 'about'>('dashboard');
   const [refreshing, setRefreshing] = useState(false);
 
   const fetchBrief = (date: string, isDateChange = false) => {
@@ -281,6 +282,10 @@ export default function Dashboard() {
               className={`px-4 py-1.5 rounded-md text-sm font-medium flex items-center gap-2 ${activeTab === 'raw' ? 'bg-white dark:bg-[#050505] shadow-sm text-orange-600 dark:text-blue-400' : 'text-gray-600 dark:text-blue-300 hover:text-gray-900 dark:text-blue-50'}`}>
               <Terminal className="w-4 h-4" /> Pipeline
             </button>
+            <button onClick={() => setActiveTab('about')}
+              className={`px-4 py-1.5 rounded-md text-sm font-medium flex items-center gap-2 ${activeTab === 'about' ? 'bg-white dark:bg-[#050505] shadow-sm text-orange-600 dark:text-blue-400' : 'text-gray-600 dark:text-blue-300 hover:text-gray-900 dark:text-blue-50'}`}>
+              <Info className="w-4 h-4" /> About Us
+            </button>
           </div>
 
           {/* Time Machine */}
@@ -364,6 +369,11 @@ export default function Dashboard() {
 // Arjun Calendar — Board Prep Session: Thu 24 Sep, 09:00–10:00 AM`}
           </div>
         </div>
+      )}
+
+      {/* About Us Tab */}
+      {activeTab === 'about' && (
+        <AboutUs dark={dark} />
       )}
 
       {activeTab === 'dashboard' && data && (

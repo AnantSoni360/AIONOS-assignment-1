@@ -4,18 +4,36 @@ Executive Productivity Agent built for AIONOS Assignment 1 (Arjun Malhotra, VP S
 
 ## Overview
 ExecPilot AI turns messy executive inputs (meetings, emails, voice notes) into a trusted daily action brief.
-It uses AI to extract intent, and deterministic code to resolve ownership, deduplicate actions, and track deadlines. 
+It uses Mistral AI to extract commitments from unstructured text, and deterministic Python to resolve ownership, deduplicate actions, detect overdue items, and filter evidence by simulation clock.
+
+## Architecture — "One Story"
+
+- **Mistral AI (Extraction Layer):** The LLM's only job is to read messy, unstructured text (emails, transcripts, voice notes) and extract raw "commitments" and pieces of "evidence". It does **NOT** do date math or assign ownership. It must return ISO 8601 deadline strings.
+- **Deterministic Python (Resolution Layer):** `decision_engine.py` is entirely deterministic:
+  - Filters evidence by the "Time Machine" clock (`as_of` timestamp) — future evidence is hidden
+  - Parses deadlines (ISO, date-only, and natural language like "morning" / "end of day")
+  - Sets status to `overdue` when the clock exceeds the deadline
+  - Enforces the Ownership Guard (null owner → `unowned` + `critical`)
+- **Fallback:** If Mistral is unavailable (no key, timeout, rate limit), the system falls back to `seed_data.json` — a pre-validated, timestamped commitment set matching the exact data pack.
 
 ## Features
 - **Ownership Guard:** Explicitly flags unowned tasks (e.g. Mumbai Lease) rather than inventing ownership.
-- **Deduplication Engine:** Merges overlapping tasks from different sources (e.g. Vendor list mentioned in meeting and email) into a single commitment with updated state.
-- **Evidence Trace:** Every commitment links directly back to original source text (the "Why I Know This" feature).
-- **Daily Action Dashboard:** White/Orange enterprise UI showing Action summaries, today's attention, and an "Ask ExecPilot" Q&A feature.
+- **Time Machine:** 5 scenario presets from Mon 9 AM → Fri 5 PM. Evidence grows over time. Overdue status kicks in exactly when the clock passes the deadline.
+- **Deduplication:** Same commitment mentioned across meeting, email, and voice note → merged into one item with all source evidence preserved.
+- **Evidence Trace:** Every commitment links back to original source text ("Why I Know This" drawer).
+- **Daily Action Dashboard:** Split view — MY ACTIONS vs WAITING ON / UNOWNED. All counters match the cards.
+- **Q&A:** 8 deterministic handlers for the most common executive questions. No API key needed.
 
 ## Tech Stack
-- **Frontend:** Next.js (React), Tailwind CSS
-- **Backend:** FastAPI (Python)
-- **LLM:** Mistral AI
+- **Frontend:** Next.js (React), Tailwind CSS, deployed on Vercel
+- **Backend:** FastAPI (Python), deployed on Render
+- **LLM:** Mistral AI (`mistral-small-latest`)
+
+## Environment Variables
+```
+MISTRAL_API_KEY=<your key>          # Backend — for live extraction and open-ended Q&A
+NEXT_PUBLIC_API_URL=<backend url>   # Frontend — points to Render backend
+```
 
 ## How to Run
 
@@ -26,32 +44,27 @@ cd backend
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-uvicorn app.main:app --reload
+MISTRAL_API_KEY=your_key uvicorn app.main:app --reload
 
 # Windows (PowerShell):
 cd backend
 python -m venv venv
-.\venv\Scripts\Activate.ps1
+.\\venv\\Scripts\\Activate.ps1
 pip install -r requirements.txt
+$env:MISTRAL_API_KEY="your_key"
 uvicorn app.main:app --reload
 ```
-Backend will run on `http://127.0.0.1:8000`.
+Backend runs on `http://127.0.0.1:8000`. Works WITHOUT an API key (falls back to seed data).
 
 ### 2. Run the Frontend
 ```bash
-# Mac/Linux:
 cd frontend
 npm install
-npm run dev
-
-# Windows (PowerShell):
-cd frontend
-npm.cmd install
-npm.cmd run dev
+npm run dev         # Mac/Linux
+npm.cmd run dev     # Windows PowerShell
 ```
-Frontend will run on `http://localhost:3000`.
+Frontend runs on `http://localhost:3000`.
 
-## System Architecture & The "One Story"
-- **Mistral AI (Extraction Layer):** The LLM's only job is to read the messy, unstructured text (emails, transcripts, voice notes) and extract raw "commitments" and pieces of "evidence". It does NOT do date math or assign ownership.
-- **Deterministic Python (Resolution Layer):** The `decision_engine.py` is entirely deterministic. It filters evidence based on the "Time Machine" clock (preventing future leaks), resolves the final status (e.g. `overdue` vs `pending`) using strict `datetime` math, and enforces the Ownership Guard (preventing hallucinated owners).
-
+## AI Tools Used
+- **Mistral AI** (`mistral-small-latest`): Used for commitment extraction only. Prompted with zero-shot JSON schema requiring ISO 8601 deadlines and per-evidence timestamps. Validation via Pydantic before downstream use.
+- **Antigravity IDE (Gemini)**: Used to scaffold the Next.js + FastAPI structure, assist with the deterministic decision engine, and iterate on the time-filtering logic.

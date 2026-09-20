@@ -130,47 +130,45 @@ export default function Dashboard() {
             </button>
           </div>
           <div className="flex-1 overflow-auto whitespace-pre-wrap">
-            {`// This represents the messy data pack fed into the ExecPilot AI Engine.
+            {`// RAW DATA PACK — verbatim sources fed into ExecPilot AI
+// 1 meeting transcript · 25 emails (5 threads × 5) · 2 voice notes · 1 calendar event
 // Clicking 'Re-run Agent' deletes the cache and hits the Mistral API live.
 
-[
-  {
-    "type": "meeting_transcript",
-    "id": "Leadership Sync",
-    "date": "2026-09-21",
-    "content": "Arjun: I told Raghav I'd send him the updated vendor list. Divya: What about the Mumbai Office Lease Renewal? I think it sits with Facilities but it's still unowned - can you confirm who's handling it by end of week?"
-  },
-  {
-    "type": "email",
-    "id": "Vendor List",
-    "date": "2026-09-22",
-    "sender": "Arjun Malhotra",
-    "recipient": "Raghav",
-    "content": "Raghav, I am reviewing the data. I will send by tomorrow (Wednesday) morning for sure."
-  },
-  {
-    "type": "voice_note",
-    "id": "Voice Note 1",
-    "date": "2026-09-22",
-    "content": "I need to get Raghav that vendor list, remind me."
-  },
-  {
-    "type": "email",
-    "id": "Q3 Campaign Deck",
-    "date": "2026-09-22",
-    "sender": "Neha Kapoor",
-    "recipient": "Arjun Malhotra",
-    "content": "Arjun, I'll have the Q3 campaign deck ready for you to review. Let's say 9:30 AM Thursday, before your board prep block."
-  },
-  {
-    "type": "email",
-    "id": "Expense Variance Report",
-    "date": "2026-09-23",
-    "sender": "Divya Rao",
-    "recipient": "Arjun Malhotra",
-    "content": "Arjun, July expense variance report attached, sent as promised."
-  }
-]`}
+// ─── MEETING TRANSCRIPT ──────────────────────────────────────────────────────
+// [Leadership Sync] Mon 21 Sep 09:35 AM
+// Arjun: Let's keep this quick. Neha, where are we on the Q3 campaign deck?
+// Neha: Draft is 80% done. I'll send it to Arjun for review by Wednesday.
+// Arjun: Also — I told Raghav I'd send him the updated vendor list. I'll get that
+//        to him by end of day tomorrow.
+// Raghav: Separately, the Mumbai office renewal paperwork needs someone to sign
+//         off this week. Not sure whose desk that's on right now.
+// Divya: I think that's supposed to be Facilities, but I haven't seen anyone
+//        pick it up.
+// Arjun: Okay, flag it, don't assume. Divya, can you pull the July expense
+//        variance report before Thursday's board prep?
+// Divya: Yes, I'll have it ready Wednesday evening.
+// Arjun: Also — Meridian Logistics call got pushed. I need to reconfirm time.
+// Neha: The deck review — I said Wednesday, but Thursday morning is safer.
+// Arjun: Noted. Let's close here.
+
+// ─── EMAIL THREADS (25 emails) ───────────────────────────────────────────────
+// Thread 1 — Vendor List (5 emails, Mon 09:50 → Wed 08:45)
+// Thread 2 — Q3 Campaign Deck (5 emails, Mon 11:00 → Thu 08:00)
+// Thread 3 — Call Reschedule / Meridian (5 emails, Mon 13:00 → Wed 14:00)
+// Thread 4 — Expense Variance Report (5 emails, Mon 14:30 → Wed 18:10)
+// Thread 5 — Mumbai Office Lease Renewal (5 emails, Mon 10:15 → Thu 16:45)
+
+// ─── VOICE NOTES ─────────────────────────────────────────────────────────────
+// Voice Note 1 [Mon 21 Sep 18:40] — "need to get Raghav that vendor list,
+//   I think I said today but it might slip to tomorrow morning, remind me.
+//   Also still haven't heard back on the Mumbai lease thing, someone needs to
+//   own that, I don't think it's me."
+// Voice Note 2 [Wed 23 Sep 08:15] — "expense variance report from Divya needs
+//   to be in my hands by Wednesday evening, not Thursday. Also Meridian call —
+//   I owe Priya a time, need to lock that in today."
+
+// ─── CALENDAR ────────────────────────────────────────────────────────────────
+// Arjun Calendar — Board Prep Session: Thu 24 Sep, 09:00–10:00 AM`}
           </div>
         </div>
       )}
@@ -209,9 +207,10 @@ export default function Dashboard() {
                           <p className="text-xs text-gray-500 mt-1">
                             <span className={`font-bold uppercase ${c.status === 'overdue' ? 'text-red-600' : ''}`}>{c.status}</span> · Deadline: {c.deadline}
                           </p>
-                          {c.id === "q3-campaign-deck-002" && (
+                          {/* Calendar conflict: deck review at 09:30 falls inside Board Prep 09:00-10:00 */}
+                          {c.deadline === '2026-09-24T09:30:00' && (
                             <p className="text-xs font-bold text-red-600 mt-1 flex items-center gap-1">
-                              <AlertCircle className="w-3 h-3"/> CALENDAR CONFLICT: Collides with Board Prep Session (Thu 9:00-10:00 AM)
+                              <AlertCircle className="w-3 h-3"/> CALENDAR CONFLICT: Collides with Board Prep Session (Thu 9:00–10:00 AM)
                             </p>
                           )}
                         </div>

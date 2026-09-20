@@ -26,5 +26,8 @@ flowchart TD
     C -- Clean JSON Payload --> D[Next.js Dashboard]
 ```
 
-## Time-Machine Capabilities
-The decision engine supports an `as_of` timestamp. This allows the backend to filter out any "future" evidence relative to the simulation clock. This is critical for demonstrating how the agent dynamically updates states as time passes (e.g. Wednesday morning vs Wednesday evening).
+## Time-Machine Capabilities & Caching
+> [!WARNING]
+> **Current Implementation Flaws:**
+> 1. **Time Machine Breakage:** The decision engine supports an `as_of` timestamp. However, the `cache_commitments.json` relies on evidence objects that lack valid ISO timestamps, meaning the time-filtering engine defaults everything to Monday, breaking the simulation.
+> 2. **Mistral Extraction Crash:** Missing the `MISTRAL_API_KEY` causes a hard crash in the backend layer instead of gracefully falling back. Furthermore, when Mistral is successfully called, it often outputs natural language dates (e.g., "morning") that break the deterministic Python `datetime.fromisoformat` parser.

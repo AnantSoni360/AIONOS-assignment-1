@@ -4,7 +4,7 @@ import { Briefcase, AlertCircle, Clock, CheckCircle, ChevronRight, Terminal, Cal
 import AboutUs from './AboutUs';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
-const MAX_API_LIMIT = 5;
+const MAX_API_LIMIT = 20;
 
 // ─── Animated Counter ──────────────────────────────────────────────────────
 function AnimatedCounter({ value }: { value: number }) {

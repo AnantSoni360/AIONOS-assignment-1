@@ -280,6 +280,8 @@ export default function Dashboard() {
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url('/hero-bg.jpg')` }}
         />
+        {/* Shimmer sweep over the hero */}
+        <div className="absolute inset-0 animate-shimmer pointer-events-none" />
         <div className="absolute inset-0 bg-gradient-to-r from-orange-500/10 via-white/40 to-transparent dark:from-blue-900/60 dark:via-black/70 dark:to-black/80" />
         <div className="relative z-10 flex justify-between items-center px-6 py-5">
           {/* Left: Avatar + Title */}
@@ -288,9 +290,9 @@ export default function Dashboard() {
               <img
                 src="/arjun.jpg"
                 alt="Arjun Malhotra"
-                className="w-14 h-14 rounded-full object-cover border-2 border-white dark:border-blue-500 shadow-lg"
+                className="w-14 h-14 rounded-full object-cover border-2 border-white dark:border-blue-500 shadow-lg animate-float"
               />
-              <span className="absolute bottom-0.5 right-0.5 w-3 h-3 bg-green-400 border-2 border-white rounded-full" title="Active" />
+              <span className="absolute bottom-0.5 right-0.5 w-3 h-3 bg-green-400 border-2 border-white rounded-full animate-pulse" title="Active" />
             </div>
             <div>
               <div className="flex items-center gap-2 mb-0.5">
@@ -410,30 +412,20 @@ export default function Dashboard() {
 
       {activeTab === 'dashboard' && data && (
         <>
-          {/* Metric Cards */}
+          {/* Metric Cards — pop in with staggered delay */}
           <div className="grid grid-cols-4 gap-4">
-            <MetricCard
-              title="Total Actions" value={data.commitments.length}
-              icon={<Briefcase className="w-5 h-5" />}
-              gradient="from-blue-500 to-blue-600"
-            />
-            <MetricCard
-              title="Overdue" value={data.commitments.filter((c:any) => c.status === 'overdue').length}
-              icon={<AlertCircle className="w-5 h-5" />}
-              gradient="from-red-500 to-rose-600"
-              color="red"
-            />
-            <MetricCard
-              title="My Actions" value={data.commitments.filter((c:any) => c.owner === 'Arjun Malhotra' && !c.waiting_on).length}
-              icon={<Clock className="w-5 h-5" />}
-              gradient="from-orange-500 to-amber-500 dark:from-blue-500 dark:to-blue-600"
-            />
-            <MetricCard
-              title="Waiting / Unowned" value={data.commitments.filter((c:any) => c.owner !== 'Arjun Malhotra' || c.waiting_on).length}
-              icon={<AlertCircle className="w-5 h-5" />}
-              gradient="from-yellow-400 to-orange-400"
-              color="yellow"
-            />
+            <div className="animate-metric-pop delay-50">
+              <MetricCard title="Total Actions" value={data.commitments.length} icon={<Briefcase className="w-5 h-5" />} gradient="from-blue-500 to-blue-600" />
+            </div>
+            <div className="animate-metric-pop delay-150">
+              <MetricCard title="Overdue" value={data.commitments.filter((c:any) => c.status === 'overdue').length} icon={<AlertCircle className="w-5 h-5" />} gradient="from-red-500 to-rose-600" color="red" />
+            </div>
+            <div className="animate-metric-pop delay-250">
+              <MetricCard title="My Actions" value={data.commitments.filter((c:any) => c.owner === 'Arjun Malhotra' && !c.waiting_on).length} icon={<Clock className="w-5 h-5" />} gradient="from-orange-500 to-amber-500 dark:from-blue-500 dark:to-blue-600" />
+            </div>
+            <div className="animate-metric-pop delay-350">
+              <MetricCard title="Waiting / Unowned" value={data.commitments.filter((c:any) => c.owner !== 'Arjun Malhotra' || c.waiting_on).length} icon={<AlertCircle className="w-5 h-5" />} gradient="from-yellow-400 to-orange-400" color="yellow" />
+            </div>
           </div>
 
           {/* Main 3-col grid */}
@@ -447,8 +439,10 @@ export default function Dashboard() {
                   {loading && <RefreshCw className="w-4 h-4 animate-spin text-gray-400 dark:text-blue-500" />}
                 </div>
                 <div className="flex flex-col gap-3">
-                  {data.commitments.filter((c:any) => c.owner === 'Arjun Malhotra' && !c.waiting_on).map((c: any) => (
-                    <CommitmentCard key={c.id} c={c} onClick={() => setSelectedCommitment(c)} />
+                  {data.commitments.filter((c:any) => c.owner === 'Arjun Malhotra' && !c.waiting_on).map((c: any, idx: number) => (
+                    <div key={c.id} className="animate-card-enter" style={{ animationDelay: `${idx * 80}ms` }}>
+                      <CommitmentCard c={c} onClick={() => setSelectedCommitment(c)} />
+                    </div>
                   ))}
                   {data.commitments.filter((c:any) => c.owner === 'Arjun Malhotra' && !c.waiting_on).length === 0 && (
                     <p className="text-gray-500 dark:text-blue-400 text-sm italic py-4">No actions for you right now.</p>
@@ -462,8 +456,10 @@ export default function Dashboard() {
                   <h2 className="text-lg font-bold text-gray-600 dark:text-blue-300">WAITING ON / UNOWNED</h2>
                 </div>
                 <div className="flex flex-col gap-3">
-                  {data.commitments.filter((c:any) => c.owner !== 'Arjun Malhotra' || c.waiting_on).map((c: any) => (
-                    <CommitmentCard key={c.id} c={c} onClick={() => setSelectedCommitment(c)} waiting />
+                  {data.commitments.filter((c:any) => c.owner !== 'Arjun Malhotra' || c.waiting_on).map((c: any, idx: number) => (
+                    <div key={c.id} className="animate-card-enter" style={{ animationDelay: `${idx * 80 + 200}ms` }}>
+                      <CommitmentCard c={c} onClick={() => setSelectedCommitment(c)} waiting />
+                    </div>
                   ))}
                   {data.commitments.filter((c:any) => c.owner !== 'Arjun Malhotra' || c.waiting_on).length === 0 && (
                     <p className="text-gray-500 dark:text-blue-400 text-sm italic py-4">Nothing waiting on others.</p>
@@ -514,7 +510,7 @@ export default function Dashboard() {
                     </div>
                   )}
                   {messages.map((msg, idx) => (
-                    <div key={idx} className={`flex gap-2 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                    <div key={idx} className={`flex gap-2 ${msg.role === 'user' ? 'justify-end animate-chat-right' : 'justify-start animate-chat-left'}`}>
                       {msg.role === 'assistant' && (
                         <div className="w-7 h-7 rounded-full bg-orange-500 dark:bg-blue-600 flex items-center justify-center flex-shrink-0 mt-1">
                           <Bot className="w-4 h-4 text-white" />
